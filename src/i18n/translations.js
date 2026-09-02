@@ -25,7 +25,7 @@ export const translations = {
     },
     wishlist: {
       title: 'Список бажань',
-      subtitlePrefix: 'Речі, за якими я стежу. Залишкова вартість списку:',
+      subtitlePrefix: 'Речі, котрі мені потрібні. Залишкова вартість списку:',
       allCategories: 'Усі',
       hideAcquired: 'Приховати отримані',
       colItem: 'Товар',
