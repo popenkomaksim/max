@@ -1,0 +1,120 @@
+export const translations = {
+  uk: {
+    nav: {
+      home: 'Головна',
+      wishlist: 'Список бажань',
+      about: 'Про мене',
+    },
+    footer: {
+      vibecoded: 'Вайбкодено в Києві, Україна',
+    },
+    theme: {
+      toLight: 'Увімкнути світлу тему',
+      toDark: 'Увімкнути темну тему',
+    },
+    menu: {
+      open: 'Відкрити меню',
+      close: 'Закрити меню',
+    },
+    home: {
+      greetingPrefix: 'Привіт, я',
+      github: 'GitHub',
+      linkedin: 'LinkedIn',
+      email: 'Написати листа',
+      highlightsTitle: 'Коротко про мене',
+    },
+    wishlist: {
+      title: 'Список бажань',
+      subtitlePrefix: 'Речі, за якими я стежу. Залишкова вартість списку:',
+      allCategories: 'Усі',
+      hideAcquired: 'Приховати отримані',
+      colItem: 'Товар',
+      colCategory: 'Категорія',
+      colPriority: 'Пріоритет',
+      colPrice: 'Ціна',
+      colAcquired: 'Отримано',
+      empty: 'Немає товарів за цими фільтрами.',
+    },
+    about: {
+      title: 'Про мене',
+      subtitle: 'Короткий огляд мого досвіду роботи та навчання.',
+    },
+    notFound: {
+      title: '404',
+      message: 'Такої сторінки не існує.',
+      backHome: 'На головну',
+    },
+    priority: {
+      high: 'Високий',
+      medium: 'Середній',
+      low: 'Низький',
+    },
+    category: {
+      tech: 'Техніка',
+      'home-office': 'Домашній офіс',
+      books: 'Книги',
+      outdoors: 'Активний відпочинок',
+      home: 'Дім',
+      health: "Здоров'я",
+    },
+  },
+  en: {
+    nav: {
+      home: 'Home',
+      wishlist: 'Wishlist',
+      about: 'About',
+    },
+    footer: {
+      vibecoded: 'Vibecoded in Kyiv, Ukraine',
+    },
+    theme: {
+      toLight: 'Switch to light mode',
+      toDark: 'Switch to dark mode',
+    },
+    menu: {
+      open: 'Open menu',
+      close: 'Close menu',
+    },
+    home: {
+      greetingPrefix: "Hi, I'm",
+      github: 'GitHub',
+      linkedin: 'LinkedIn',
+      email: 'Email Me',
+      highlightsTitle: 'Quick Highlights',
+    },
+    wishlist: {
+      title: 'Wishlist',
+      subtitlePrefix: "Things I'm keeping an eye on. Remaining wishlist value:",
+      allCategories: 'All',
+      hideAcquired: 'Hide acquired',
+      colItem: 'Item',
+      colCategory: 'Category',
+      colPriority: 'Priority',
+      colPrice: 'Price',
+      colAcquired: 'Acquired',
+      empty: 'No items match these filters.',
+    },
+    about: {
+      title: 'About',
+      subtitle: "A brief timeline of where I've worked and studied.",
+    },
+    notFound: {
+      title: '404',
+      message: "This page doesn't exist.",
+      backHome: 'Back home',
+    },
+    priority: {
+      high: 'High',
+      medium: 'Medium',
+      low: 'Low',
+    },
+    category: {
+      tech: 'Tech',
+      'home-office': 'Home Office',
+      books: 'Books',
+      outdoors: 'Outdoors',
+      home: 'Home',
+      health: 'Health',
+    },
+  },
+}

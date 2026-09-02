@@ -1,0 +1,182 @@
+[
+  {
+    "id": "mech-keyboard",
+    "categoryKey": "tech",
+    "priorityKey": "high",
+    "price": 180,
+    "url": "https://example.com/mechanical-keyboard",
+    "acquired": false,
+    "uk": { "name": "Механічна клавіатура", "notes": "Гарячозамінні перемикачі, бездротова." },
+    "en": { "name": "Mechanical Keyboard", "notes": "Hot-swappable switches, wireless." }
+  },
+  {
+    "id": "standing-desk",
+    "categoryKey": "home-office",
+    "priorityKey": "medium",
+    "price": 450,
+    "url": "https://example.com/standing-desk",
+    "acquired": false,
+    "uk": { "name": "Стіл з регулюванням висоти", "notes": "Електричний підйом, кріплення для двох моніторів." },
+    "en": { "name": "Standing Desk", "notes": "Electric height adjustment, dual monitor arm compatible." }
+  },
+  {
+    "id": "pragmatic-programmer",
+    "categoryKey": "books",
+    "priorityKey": "low",
+    "price": 35,
+    "url": "https://example.com/pragmatic-programmer",
+    "acquired": true,
+    "uk": { "name": "Прагматичний програміст", "notes": "Ювілейне видання до 20-річчя." },
+    "en": { "name": "The Pragmatic Programmer", "notes": "20th anniversary edition." }
+  },
+  {
+    "id": "noise-cancelling-headphones",
+    "categoryKey": "tech",
+    "priorityKey": "high",
+    "price": 320,
+    "url": "https://example.com/anc-headphones",
+    "acquired": false,
+    "uk": { "name": "Навушники з шумозаглушенням", "notes": "Для зосередженої роботи." },
+    "en": { "name": "Noise Cancelling Headphones", "notes": "For focused deep-work sessions." }
+  },
+  {
+    "id": "camping-tent",
+    "categoryKey": "outdoors",
+    "priorityKey": "medium",
+    "price": 220,
+    "url": "https://example.com/camping-tent",
+    "acquired": false,
+    "uk": { "name": "Намет на 3 особи", "notes": "Легкий, трисезонний." },
+    "en": { "name": "3-Person Camping Tent", "notes": "Lightweight, 3-season." }
+  },
+  {
+    "id": "espresso-machine",
+    "categoryKey": "home",
+    "priorityKey": "low",
+    "price": 600,
+    "url": "https://example.com/espresso-machine",
+    "acquired": false,
+    "uk": { "name": "Espresso-машина", "notes": "Напівавтоматична, з вбудованою кавомолкою." },
+    "en": { "name": "Espresso Machine", "notes": "Semi-automatic with built-in grinder." }
+  },
+  {
+    "id": "cbc-esr",
+    "categoryKey": "health",
+    "priorityKey": "high",
+    "url": "",
+    "acquired": false,
+    "uk": {
+      "name": "Загальний аналіз крові з лейкоцитарною формулою та ШОЕ",
+      "notes": "Загальноклінічні та біохімічні показники"
+    },
+    "en": {
+      "name": "Complete blood count with differential and ESR",
+      "notes": "General clinical & biochemical markers"
+    }
+  },
+  {
+    "id": "fasting-glucose",
+    "categoryKey": "health",
+    "priorityKey": "high",
+    "url": "",
+    "acquired": false,
+    "uk": { "name": "Глюкоза плазми крові натще", "notes": "Загальноклінічні та біохімічні показники" },
+    "en": { "name": "Fasting plasma glucose", "notes": "General clinical & biochemical markers" }
+  },
+  {
+    "id": "biochem-panel",
+    "categoryKey": "health",
+    "priorityKey": "high",
+    "url": "",
+    "acquired": false,
+    "uk": {
+      "name": "Біохімічний аналіз крові (печінкові та ниркові проби: АЛТ, АСТ, білірубін загальний/прямий, сечовина, креатинін)",
+      "notes": "Загальноклінічні та біохімічні показники"
+    },
+    "en": {
+      "name": "Biochemical blood panel (liver & kidney function: ALT, AST, total/direct bilirubin, urea, creatinine)",
+      "notes": "General clinical & biochemical markers"
+    }
+  },
+  {
+    "id": "tsh",
+    "categoryKey": "health",
+    "priorityKey": "high",
+    "url": "",
+    "acquired": false,
+    "uk": { "name": "Тиреотропний гормон (ТТГ)", "notes": "Оцінка тиреоїдного статусу (панель щитоподібної залози)" },
+    "en": { "name": "Thyroid-stimulating hormone (TSH)", "notes": "Thyroid panel" }
+  },
+  {
+    "id": "ft3",
+    "categoryKey": "health",
+    "priorityKey": "high",
+    "url": "",
+    "acquired": false,
+    "uk": { "name": "Трийодтиронін вільний (FT3)", "notes": "Оцінка тиреоїдного статусу (панель щитоподібної залози)" },
+    "en": { "name": "Free triiodothyronine (FT3)", "notes": "Thyroid panel" }
+  },
+  {
+    "id": "ft4",
+    "categoryKey": "health",
+    "priorityKey": "high",
+    "url": "",
+    "acquired": false,
+    "uk": { "name": "Тироксин вільний (FT4)", "notes": "Оцінка тиреоїдного статусу (панель щитоподібної залози)" },
+    "en": { "name": "Free thyroxine (FT4)", "notes": "Thyroid panel" }
+  },
+  {
+    "id": "anti-tpo",
+    "categoryKey": "health",
+    "priorityKey": "high",
+    "url": "",
+    "acquired": false,
+    "uk": { "name": "Антитіла до тиреопероксидази (АТПО)", "notes": "Оцінка тиреоїдного статусу (панель щитоподібної залози)" },
+    "en": { "name": "Anti-thyroid peroxidase antibodies (anti-TPO)", "notes": "Thyroid panel" }
+  },
+  {
+    "id": "vitamin-d",
+    "categoryKey": "health",
+    "priorityKey": "medium",
+    "url": "",
+    "acquired": false,
+    "uk": { "name": "25-гідроксивітамін D, 25(OH)D (Вітамін D3)", "notes": "Мікронутрієнтний та мікроелементний статус" },
+    "en": { "name": "25-hydroxyvitamin D, 25(OH)D (Vitamin D3)", "notes": "Micronutrient & trace element status" }
+  },
+  {
+    "id": "serum-ferritin",
+    "categoryKey": "health",
+    "priorityKey": "medium",
+    "url": "",
+    "acquired": false,
+    "uk": { "name": "Феритин сироватки", "notes": "Мікронутрієнтний та мікроелементний статус" },
+    "en": { "name": "Serum ferritin", "notes": "Micronutrient & trace element status" }
+  },
+  {
+    "id": "thyroid-us",
+    "categoryKey": "health",
+    "priorityKey": "high",
+    "url": "",
+    "acquired": false,
+    "uk": { "name": "Ультразвукове дослідження (УЗД) щитоподібної залози", "notes": "Інструментальні дослідження" },
+    "en": { "name": "Thyroid ultrasound (US)", "notes": "Instrumental studies" }
+  },
+  {
+    "id": "abdominal-us",
+    "categoryKey": "health",
+    "priorityKey": "high",
+    "url": "",
+    "acquired": false,
+    "uk": { "name": "Ультразвукове дослідження (УЗД) органів черевної порожнини", "notes": "Інструментальні дослідження" },
+    "en": { "name": "Abdominal ultrasound (US)", "notes": "Instrumental studies" }
+  },
+  {
+    "id": "ecg-12-lead",
+    "categoryKey": "health",
+    "priorityKey": "high",
+    "url": "",
+    "acquired": false,
+    "uk": { "name": "Електрокардіографія (ЕКГ) у 12 відведеннях", "notes": "Інструментальні дослідження" },
+    "en": { "name": "12-lead electrocardiography (ECG)", "notes": "Instrumental studies" }
+  }
+]

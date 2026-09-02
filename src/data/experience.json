@@ -1,0 +1,34 @@
+[
+  {
+    "id": "senior-eng",
+    "type": "work",
+    "uk": {
+      "role": "Тімлід розробки",
+      "org": "DataArt",
+      "period": "2023 — дотепер",
+      "summary": "Керую розробкою клієнтської панелі, наставляю двох інженерів і впроваджую спільну бібліотеку компонентів."
+    },
+    "en": {
+      "role": "Team Lead, Development",
+      "org": "DataArt",
+      "period": "2023 — Present",
+      "summary": "Leading development of the customer-facing dashboard, mentoring two engineers, and driving adoption of a shared component library."
+    }
+  },
+  {
+    "id": "cs-degree",
+    "type": "education",
+    "uk": {
+      "role": "Бакалавр комп'ютерних наук",
+      "org": "Національний технічний університет України «Київський політехнічний інститут»",
+      "period": "2015 — 2019",
+      "summary": "Закінчив навчання з фокусом на розподілені системи та взаємодію людини й комп'ютера."
+    },
+    "en": {
+      "role": "B.Sc. Computer Science",
+      "org": "National Technical University of Ukraine 'Kyiv Polytechnic Institute'",
+      "period": "2015 — 2019",
+      "summary": "Graduated with a focus on distributed systems and human-computer interaction."
+    }
+  }
+]
