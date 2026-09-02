@@ -1,63 +1,23 @@
 [
   {
-    "id": "wacaco",
+    "id": "nanopresso",
     "categoryKey": "coffee",
-    "priorityKey": "high",
-    "price": 180,
-    "url": "https://www.wacaco.com/products/picopresso",
-    "acquired": false,
-    "uk": { "name": "Механічна клавіатура", "notes": "Гарячозамінні перемикачі, бездротова." },
-    "en": { "name": "Mechanical Keyboard", "notes": "Hot-swappable switches, wireless." }
-  },
-  {
-    "id": "standing-desk",
-    "categoryKey": "home-office",
     "priorityKey": "medium",
-    "price": 450,
-    "url": "https://example.com/standing-desk",
+    "price": 65,
+    "url": "https://www.wacaco.com/products/nanopresso?variant=41572735647817",
     "acquired": false,
-    "uk": { "name": "Стіл з регулюванням висоти", "notes": "Електричний підйом, кріплення для двох моніторів." },
-    "en": { "name": "Standing Desk", "notes": "Electric height adjustment, dual monitor arm compatible." }
+    "uk": { "name": "Nanopresso", "notes": "Портативна еспресо-машина, до 18 бар тиску." },
+    "en": { "name": "Nanopresso", "notes": "Portable espresso maker, up to 18 bar pressure." }
   },
   {
-    "id": "pragmatic-programmer",
-    "categoryKey": "books",
-    "priorityKey": "low",
-    "price": 35,
-    "url": "https://example.com/pragmatic-programmer",
-    "acquired": true,
-    "uk": { "name": "Прагматичний програміст", "notes": "Ювілейне видання до 20-річчя." },
-    "en": { "name": "The Pragmatic Programmer", "notes": "20th anniversary edition." }
-  },
-  {
-    "id": "noise-cancelling-headphones",
-    "categoryKey": "tech",
-    "priorityKey": "high",
-    "price": 320,
-    "url": "https://example.com/anc-headphones",
-    "acquired": false,
-    "uk": { "name": "Навушники з шумозаглушенням", "notes": "Для зосередженої роботи." },
-    "en": { "name": "Noise Cancelling Headphones", "notes": "For focused deep-work sessions." }
-  },
-  {
-    "id": "camping-tent",
+    "id": "fox-knee-guards",
     "categoryKey": "outdoors",
     "priorityKey": "medium",
-    "price": 220,
-    "url": "https://example.com/camping-tent",
+    "price": 105,
+    "url": "https://www.foxracing.com/product/enduro-pro-knee-guards/32122.html?dwvar_32122_color=001&cgid=protection-mtb",
     "acquired": false,
-    "uk": { "name": "Намет на 3 особи", "notes": "Легкий, трисезонний." },
-    "en": { "name": "3-Person Camping Tent", "notes": "Lightweight, 3-season." }
-  },
-  {
-    "id": "espresso-machine",
-    "categoryKey": "home",
-    "priorityKey": "low",
-    "price": 600,
-    "url": "https://example.com/espresso-machine",
-    "acquired": false,
-    "uk": { "name": "Espresso-машина", "notes": "Напівавтоматична, з вбудованою кавомолкою." },
-    "en": { "name": "Espresso Machine", "notes": "Semi-automatic with built-in grinder." }
+    "uk": { "name": "Наколінники Fox Enduro Pro", "notes": "Захист з вставками Koroyd, чорний колір." },
+    "en": { "name": "Fox Enduro Pro Knee Guards", "notes": "Koroyd-insert protection, black colorway." }
   },
   {
     "id": "cbc-esr",

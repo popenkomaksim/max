@@ -58,6 +58,7 @@ export const translations = {
       outdoors: 'Активний відпочинок',
       home: 'Дім',
       health: "Здоров'я",
+      coffee: 'Кава',
     },
   },
   en: {
@@ -119,6 +120,7 @@ export const translations = {
       outdoors: 'Outdoors',
       home: 'Home',
       health: 'Health',
+      coffee: 'Coffee',
     },
   },
 }
