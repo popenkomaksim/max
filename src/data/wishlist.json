@@ -1,10 +1,10 @@
 [
   {
-    "id": "mech-keyboard",
-    "categoryKey": "tech",
+    "id": "wacaco",
+    "categoryKey": "coffee",
     "priorityKey": "high",
     "price": 180,
-    "url": "https://example.com/mechanical-keyboard",
+    "url": "https://www.wacaco.com/products/picopresso",
     "acquired": false,
     "uk": { "name": "Механічна клавіатура", "notes": "Гарячозамінні перемикачі, бездротова." },
     "en": { "name": "Mechanical Keyboard", "notes": "Hot-swappable switches, wireless." }

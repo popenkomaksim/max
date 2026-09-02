@@ -3,6 +3,10 @@ import { ExternalLink, Check } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext.jsx'
 import { translations } from '../i18n/translations.js'
 import wishlistData from '../data/wishlist.json'
+import LiquidButton from '../components/LiquidButton.jsx'
+
+const MONOBANK_JAR_URL = 'https://send.monobank.ua/jar/78kTAqpQPm'
+const SUPPORT_BANNER_DEADLINE = new Date('2026-09-23T00:00:00')
 
 const STORAGE_KEY = 'wishlist-acquired'
 const priorityOrder = { high: 0, medium: 1, low: 2 }
@@ -60,6 +64,17 @@ export default function Wishlist() {
 
   return (
     <div className="flex flex-col gap-8">
+      {new Date() < SUPPORT_BANNER_DEADLINE && (
+        <div className="flex flex-col items-center text-center">
+          <p className="mb-2 text-sm font-medium text-slate-500 dark:text-slate-400">{t.wishlist.supportJoke}</p>
+          <LiquidButton
+            text={t.wishlist.supportButton}
+            width={320}
+            onClick={() => window.open(MONOBANK_JAR_URL, '_blank', 'noreferrer')}
+          />
+        </div>
+      )}
+
       <div>
         <h1 className="text-3xl font-bold tracking-tight">{t.wishlist.title}</h1>
         <p className="mt-2 text-slate-600 dark:text-slate-300">

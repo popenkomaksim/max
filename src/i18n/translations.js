@@ -34,6 +34,8 @@ export const translations = {
       colPrice: 'Ціна',
       colAcquired: 'Отримано',
       empty: 'Немає товарів за цими фільтрами.',
+      supportJoke: 'Немає часу пояснювати, тисни:',
+      supportButton: 'Профінансуй мої аналізи',
     },
     about: {
       title: 'Про мене',
@@ -93,6 +95,8 @@ export const translations = {
       colPrice: 'Price',
       colAcquired: 'Acquired',
       empty: 'No items match these filters.',
+      supportJoke: 'No time to explain, just click:',
+      supportButton: 'Finance My Med Analysis',
     },
     about: {
       title: 'About',
