@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint .",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build && mkdir -p dist/thank-you && cp dist/index.html dist/thank-you/index.html",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
