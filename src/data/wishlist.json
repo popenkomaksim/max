@@ -23,7 +23,7 @@
     "id": "lab-tests",
     "categoryKey": "health",
     "priorityKey": "high",
-    "price": 100,
+    "price": 95,
     "url": "https://send.monobank.ua/jar/78kTAqpQPm",
     "acquired": false,
     "uk": {
@@ -40,7 +40,7 @@
     "categoryKey": "health",
     "priorityKey": "medium",
     "url": "https://send.monobank.ua/jar/8CqHeNr9qz",
-    "price": 80,
+    "price": 67,
     "acquired": false,
     "uk": {
       "name": "Інструментальні дослідження",
