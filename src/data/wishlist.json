@@ -2,7 +2,7 @@
   {
     "id": "nanopresso",
     "categoryKey": "coffee",
-    "priorityKey": "medium",
+    "priorityKey": "low",
     "price": 65,
     "url": "https://www.wacaco.com/products/nanopresso?variant=41572735647817",
     "acquired": false,
@@ -23,6 +23,7 @@
     "id": "lab-tests",
     "categoryKey": "health",
     "priorityKey": "high",
+    "price": 100,
     "url": "https://send.monobank.ua/jar/78kTAqpQPm",
     "acquired": false,
     "uk": {
@@ -37,8 +38,9 @@
   {
     "id": "instrumental-studies",
     "categoryKey": "health",
-    "priorityKey": "high",
-    "url": "https://send.monobank.ua/jar/78kTAqpQPm",
+    "priorityKey": "medium",
+    "url": "https://send.monobank.ua/jar/8CqHeNr9qz",
+    "price": 80,
     "acquired": false,
     "uk": {
       "name": "Інструментальні дослідження",

@@ -4,11 +4,14 @@ import { useLanguage } from '../context/LanguageContext.jsx'
 import { translations } from '../i18n/translations.js'
 import wishlistData from '../data/wishlist.json'
 import LiquidButton from '../components/LiquidButton.jsx'
+import useUsdToUahRate from '../hooks/useUsdToUahRate.js'
 
 const MONOBANK_JAR_URL = 'https://send.monobank.ua/jar/78kTAqpQPm'
 const SUPPORT_BANNER_DEADLINE = new Date('2026-09-23T00:00:00')
 
 const STORAGE_KEY = 'wishlist-acquired'
+const CURRENCY_KEY = 'wishlist-currency'
+const CURRENCIES = ['UAH', 'USD']
 const priorityOrder = { high: 0, medium: 1, low: 2 }
 const priorityClasses = {
   high: 'bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-300',
@@ -24,16 +27,38 @@ function loadAcquiredOverrides() {
   }
 }
 
+function loadCurrency() {
+  try {
+    return localStorage.getItem(CURRENCY_KEY) === 'USD' ? 'USD' : 'UAH'
+  } catch {
+    return 'UAH'
+  }
+}
+
+function formatPrice(priceUsd, currency, rate) {
+  if (typeof priceUsd !== 'number') return '—'
+  if (currency === 'USD') return `$${priceUsd.toLocaleString()}`
+  if (!rate) return '…'
+  return `₴${Math.round(priceUsd * rate).toLocaleString()}`
+}
+
 export default function Wishlist() {
   const { lang } = useLanguage()
   const t = translations[lang]
   const [acquiredOverrides, setAcquiredOverrides] = useState(loadAcquiredOverrides)
   const [categoryFilter, setCategoryFilter] = useState('all')
   const [hideAcquired, setHideAcquired] = useState(false)
+  const [currency, setCurrency] = useState(loadCurrency)
+  const { rate, error: rateError } = useUsdToUahRate()
+  const effectiveCurrency = currency === 'UAH' && rateError ? 'USD' : currency
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(acquiredOverrides))
   }, [acquiredOverrides])
+
+  useEffect(() => {
+    localStorage.setItem(CURRENCY_KEY, currency)
+  }, [currency])
 
   const items = useMemo(
     () =>
@@ -79,8 +104,19 @@ export default function Wishlist() {
         <h1 className="text-3xl font-bold tracking-tight">{t.wishlist.title}</h1>
         <p className="mt-2 text-slate-600 dark:text-slate-300">
           {t.wishlist.subtitlePrefix}{' '}
-          <span className="font-semibold text-slate-900 dark:text-white">${totalValue.toLocaleString()}</span>
+          <span className="font-semibold text-slate-900 dark:text-white">
+            {formatPrice(totalValue, effectiveCurrency, rate)}
+          </span>
         </p>
+        {currency === 'UAH' && (
+          <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+            {rateError
+              ? t.wishlist.rateUnavailable
+              : rate
+                ? `${t.wishlist.rateNote} 1 $ = ${rate.toFixed(2)} ₴`
+                : t.wishlist.rateLoading}
+          </p>
+        )}
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -99,6 +135,22 @@ export default function Wishlist() {
               {category === 'all' ? t.wishlist.allCategories : t.category[category]}
             </button>
           ))}
+          <div className="ml-2 flex gap-1 rounded-full bg-slate-100 p-1 dark:bg-slate-800">
+            {CURRENCIES.map((c) => (
+              <button
+                key={c}
+                type="button"
+                onClick={() => setCurrency(c)}
+                className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
+                  currency === c
+                    ? 'bg-indigo-600 text-white'
+                    : 'text-slate-700 hover:bg-slate-200 dark:text-slate-200 dark:hover:bg-slate-700'
+                }`}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
         </div>
 
         <label className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
@@ -154,7 +206,7 @@ export default function Wishlist() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
-                    {typeof item.price === 'number' ? `$${item.price.toLocaleString()}` : '—'}
+                    {formatPrice(item.price, effectiveCurrency, rate)}
                   </td>
                   <td className="px-4 py-3">
                     <button

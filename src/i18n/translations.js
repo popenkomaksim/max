@@ -36,6 +36,9 @@ export const translations = {
       empty: 'Немає товарів за цими фільтрами.',
       supportJoke: 'Немає часу пояснювати, тисни:',
       supportButton: 'Профінансуй мої аналізи',
+      rateLoading: 'Завантаження курсу НБУ…',
+      rateNote: 'Курс НБУ на сьогодні:',
+      rateUnavailable: 'Курс НБУ недоступний, показано в доларах.',
     },
     about: {
       title: 'Про мене',
@@ -104,6 +107,9 @@ export const translations = {
       empty: 'No items match these filters.',
       supportJoke: 'No time to explain, just click:',
       supportButton: 'Finance My Med Analysis',
+      rateLoading: 'Loading NBU rate…',
+      rateNote: "Today's NBU rate:",
+      rateUnavailable: 'NBU rate unavailable, showing USD.',
     },
     about: {
       title: 'About',
