@@ -20,6 +20,16 @@
     "en": { "name": "Fox Enduro Pro Knee Guards", "notes": "Koroyd-insert protection, black colorway." }
   },
   {
+    "id": "dropper-post-30-9",
+    "categoryKey": "outdoors",
+    "priorityKey": "medium",
+    "price": 399,
+    "url": "",
+    "acquired": false,
+    "uk": { "name": "Дропер-пост ф30,9 мм", "notes": "Регульований підсідельний штир для MTB, діаметр 30,9 мм." },
+    "en": { "name": "Dropper Post ø30.9 mm", "notes": "Adjustable MTB seatpost, 30.9 mm diameter." }
+  },
+  {
     "id": "lab-tests",
     "categoryKey": "health",
     "priorityKey": "high",
