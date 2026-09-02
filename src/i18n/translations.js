@@ -41,6 +41,12 @@ export const translations = {
       title: 'Про мене',
       subtitle: 'Короткий огляд мого досвіду роботи та навчання.',
     },
+    thankYou: {
+      title: 'Дякую!',
+      message: 'Дякую, що завітали і за вашу підтримку — це справді багато для мене значить.',
+      imageAlt: 'Максим усміхається',
+      backHome: 'На головну',
+    },
     notFound: {
       title: '404',
       message: 'Такої сторінки не існує.',
@@ -102,6 +108,12 @@ export const translations = {
     about: {
       title: 'About',
       subtitle: "A brief timeline of where I've worked and studied.",
+    },
+    thankYou: {
+      title: 'Thank You!',
+      message: "Thanks for stopping by and for your support — it genuinely means a lot.",
+      imageAlt: 'Maksym smiling',
+      backHome: 'Back home',
     },
     notFound: {
       title: '404',

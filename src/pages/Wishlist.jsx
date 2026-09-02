@@ -143,7 +143,7 @@ export default function Wishlist() {
                         i.name
                       )}
                     </div>
-                    <div className="text-xs text-slate-500 dark:text-slate-400">{i.notes}</div>
+                    <div className="whitespace-pre-line text-xs text-slate-500 dark:text-slate-400">{i.notes}</div>
                   </td>
                   <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{t.category[item.categoryKey]}</td>
                   <td className="px-4 py-3">
