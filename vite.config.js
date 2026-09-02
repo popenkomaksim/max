@@ -1,9 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// Repo is served at https://<user>.github.io/max/, so assets must resolve
-// relative to that subpath rather than the domain root.
+// Served from a custom domain at the root, so assets resolve relative to "/".
 export default defineConfig({
   plugins: [react()],
-  base: '/max/',
+  base: '/',
 })
