@@ -47,7 +47,7 @@ export const translations = {
     thankYou: {
       title: 'Дякую!',
       message: 'Дякую, що завітали і за вашу підтримку — це справді багато для мене значить.',
-      imageAlt: 'Максим усміхається',
+      imageAlt: 'Максим у горах',
       backHome: 'На головну',
     },
     notFound: {
@@ -118,7 +118,7 @@ export const translations = {
     thankYou: {
       title: 'Thank You!',
       message: "Thanks for stopping by and for your support — it genuinely means a lot.",
-      imageAlt: 'Maksym smiling',
+      imageAlt: 'Maksym in the mountains',
       backHome: 'Back home',
     },
     notFound: {
