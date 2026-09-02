@@ -9,7 +9,7 @@ export default function ThankYou() {
   return (
     <div className="flex flex-col items-center gap-6 py-16 text-center">
       <img
-        src="/smile.jpeg"
+        src="/mountains.jpg"
         alt={t.thankYou.imageAlt}
         className="h-60 w-60 rounded-full object-cover shadow-lg"
       />
