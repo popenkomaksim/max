@@ -43,6 +43,8 @@ export const translations = {
     about: {
       title: 'Про мене',
       subtitle: 'Короткий огляд мого досвіду роботи та навчання.',
+      workTitle: 'Досвід',
+      mountainsTitle: 'Гори',
     },
     thankYou: {
       title: 'Дякую!',
@@ -114,6 +116,8 @@ export const translations = {
     about: {
       title: 'About',
       subtitle: "A brief timeline of where I've worked and studied.",
+      workTitle: 'Experience',
+      mountainsTitle: 'Mountains',
     },
     thankYou: {
       title: 'Thank You!',

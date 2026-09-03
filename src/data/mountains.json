@@ -1,0 +1,87 @@
+[
+  {
+    "id": "hoverla",
+    "type": "mountain",
+    "year": 1995,
+    "uk": {
+      "name": "Говерла",
+      "period": "1995",
+      "location": "Україна",
+      "summary": "2 061 м · Найвища вершина України"
+    },
+    "en": {
+      "name": "Говерла (Hoverla)",
+      "period": "1995",
+      "location": "Україна (Ukraine)",
+      "summary": "2,061 m · Highest peak of Ukraine"
+    }
+  },
+  {
+    "id": "chopok",
+    "type": "mountain",
+    "year": 2017,
+    "uk": {
+      "name": "Chopok (Хопок)",
+      "period": "2017",
+      "location": "Slovensko (Словаччина)",
+      "summary": "2 024 м · Низькі Татри"
+    },
+    "en": {
+      "name": "Chopok",
+      "period": "2017",
+      "location": "Slovensko (Slovakia)",
+      "summary": "2,024 m · Low Tatras"
+    }
+  },
+  {
+    "id": "olympus-mytikas",
+    "type": "mountain",
+    "year": 2026,
+    "uk": {
+      "name": "Μύτικας (Мітікас)",
+      "period": "2026",
+      "location": "Ελλάδα (Греція)",
+      "summary": "2 917,8 м · Маршрут: Σκάλα – Οροπέδιο Μουσών"
+    },
+    "en": {
+      "name": "Μύτικας (Mytikas)",
+      "period": "2026",
+      "location": "Ελλάδα (Greece)",
+      "summary": "2,917.8 m · Route: Σκάλα – Οροπέδιο Μουσών"
+    }
+  },
+  {
+    "id": "skala-summit",
+    "type": "mountain",
+    "year": 2026,
+    "uk": {
+      "name": "Σκάλα (Скала)",
+      "period": "2026",
+      "location": "Ελλάδα (Греція)",
+      "summary": "2 866 м · Вершина Σκάλα, Олімп"
+    },
+    "en": {
+      "name": "Σκάλα (Skala Summit)",
+      "period": "2026",
+      "location": "Ελλάδα (Greece)",
+      "summary": "2,866 m · Σκάλα peak, Mount Olympus"
+    }
+  },
+  {
+    "id": "vihren",
+    "type": "mountain",
+    "year": 2026,
+    "uk": {
+      "name": "Вихрен",
+      "period": "2026",
+      "location": "България (Болгарія)",
+      "summary": "2 914 м · Найвища вершина гір Пірин"
+    },
+    "en": {
+      "name": "Вихрен (Vihren)",
+      "period": "2026",
+      "location": "България (Bulgaria)",
+      "summary": "2,914 m · Highest peak of the Pirin mountains"
+    }
+  }
+]
