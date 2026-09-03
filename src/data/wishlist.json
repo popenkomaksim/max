@@ -46,6 +46,16 @@
     }
   },
   {
+    "id": "flipper-zero",
+    "categoryKey": "tech",
+    "priorityKey": "medium",
+    "price": 199,
+    "url": "https://flipper.net/products/flipper-zero",
+    "acquired": false,
+    "uk": { "name": "Flipper Zero", "notes": "Портативний мультиінструмент для пентестингу з підтримкою RFID, NFC, Sub-GHz, Bluetooth, GPIO та інфрачервоного порту." },
+    "en": { "name": "Flipper Zero", "notes": "Portable multi-tool for pentesters with RFID, NFC, Sub-GHz, Bluetooth, GPIO, and infrared support." }
+  },
+  {
     "id": "instrumental-studies",
     "categoryKey": "health",
     "priorityKey": "medium",
