@@ -17,6 +17,23 @@
     }
   },
   {
+    "id": "ryapetska",
+    "type": "mountain",
+    "year": 2008,
+    "uk": {
+      "name": "Ряпецька",
+      "period": "2008",
+      "location": "Україна",
+      "summary": "1 210 м · Полонина Боржава"
+    },
+    "en": {
+      "name": "Ряпецька (Ryapetska)",
+      "period": "2008",
+      "location": "Україна (Ukraine)",
+      "summary": "1,210 m · Borzhava massif"
+    }
+  },
+  {
     "id": "chopok",
     "type": "mountain",
     "year": 2017,

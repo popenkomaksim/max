@@ -19,18 +19,35 @@
   {
     "id": "cs-degree",
     "type": "education",
-    "year": 2015,
+    "year": 2007,
     "uk": {
       "role": "Бакалавр комп'ютерних наук",
       "org": "Національний технічний університет України «Київський політехнічний інститут»",
-      "period": "2015 — 2019",
+      "period": "2007 — 2011",
       "summary": "Закінчив навчання з фокусом на розподілені системи та взаємодію людини й комп'ютера."
     },
     "en": {
       "role": "B.Sc. Computer Science",
       "org": "National Technical University of Ukraine 'Kyiv Polytechnic Institute'",
-      "period": "2015 — 2019",
+      "period": "2007 — 2011",
       "summary": "Graduated with a focus on distributed systems and human-computer interaction."
+    }
+  },
+  {
+    "id": "cs-masters",
+    "type": "education",
+    "year": 2011,
+    "uk": {
+      "role": "Аналітик комп'ютерних систем (Магістр)",
+      "org": "Національний технічний університет України «Київський політехнічний інститут»",
+      "period": "2011 — 2013",
+      "summary": "Продовжив навчання за магістерською програмою з аналізу комп'ютерних систем."
+    },
+    "en": {
+      "role": "Computer Systems Analyst (M.Sc.)",
+      "org": "National Technical University of Ukraine 'Kyiv Polytechnic Institute'",
+      "period": "2011 — 2013",
+      "summary": "Continued studies in the M.Sc. program in computer systems analysis."
     }
   }
 ]
