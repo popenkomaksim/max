@@ -7,6 +7,14 @@
     <meta name="description" content="Personal site, project portfolio, and wishlist." />
     <title>Maksym Popenko</title>
     <script>
+      // Old links used hash-based routing (e.g. /#/wishlist). Rewrite them to
+      // real paths before React Router reads the URL, so they keep working.
+      if (window.location.hash.startsWith('#/')) {
+        var target = window.location.hash.slice(1)
+        window.history.replaceState(null, '', target + window.location.search)
+      }
+    </script>
+    <script>
       // Respect the OS/browser preference before React mounts, so there's no
       // flash of the wrong theme on first paint.
       if (
