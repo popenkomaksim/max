@@ -70,6 +70,7 @@ export const translations = {
       home: 'Дім',
       health: "Здоров'я",
       coffee: 'Кава',
+      accessories: 'Аксесуари',
     },
   },
   en: {
@@ -143,6 +144,7 @@ export const translations = {
       home: 'Home',
       health: 'Health',
       coffee: 'Coffee',
+      accessories: 'Accessories',
     },
   },
 }

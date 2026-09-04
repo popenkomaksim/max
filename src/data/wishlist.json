@@ -56,6 +56,26 @@
     "en": { "name": "Flipper Zero", "notes": "Portable multi-tool for pentesters with RFID, NFC, Sub-GHz, Bluetooth, GPIO, and infrared support." }
   },
   {
+    "id": "kailas-fuga-du-dual-boa",
+    "categoryKey": "outdoors",
+    "priorityKey": "medium",
+    "price": 254,
+    "url": "https://www.x-zone.com.ua/ua/1753/1836/kailas-fuga-du-dual-boa-low-trail-running-shoes-mens-tide-green-blue.html",
+    "acquired": false,
+    "uk": { "name": "Kailas Fuga DU Dual BOA Low", "notes": "Трейлові кросівки з подвійною системою шнурівки BOA, чоловічі, колір Tide Green Blue." },
+    "en": { "name": "Kailas Fuga DU Dual BOA Low", "notes": "Trail running shoes with Dual BOA lacing system, men's, Tide Green Blue colorway." }
+  },
+  {
+    "id": "ray-ban-folding-wayfarer",
+    "categoryKey": "accessories",
+    "priorityKey": "low",
+    "price": 191,
+    "url": "https://bonate.com.ua/ua/products/ray-ban-okulary-przeciwsloneczne-black-ra254e00g-q13/",
+    "acquired": false,
+    "uk": { "name": "Ray-Ban 0RB4105 Folding Wayfarer", "notes": "Сонцезахисні окуляри, складна оправа, чорний колір." },
+    "en": { "name": "Ray-Ban 0RB4105 Folding Wayfarer", "notes": "Folding sunglasses, black colorway." }
+  },
+  {
     "id": "instrumental-studies",
     "categoryKey": "health",
     "priorityKey": "medium",
