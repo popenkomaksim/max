@@ -23,6 +23,10 @@ export const translations = {
       linkedin: 'LinkedIn',
       email: 'Написати листа',
       highlightsTitle: 'Коротко про мене',
+      statementLine1: 'Веб-дизайн це',
+      statementLine2: 'новий поп-арт.',
+      daysCounterTemplate:
+        'Я живу на цій планеті {days1}, з яких {days2} Російська Федерація здійснює агресію проти мене і моєї країни, з яких {days3} — повномасштабне вторгнення.',
     },
     wishlist: {
       title: 'Список бажань',
@@ -102,6 +106,10 @@ export const translations = {
       linkedin: 'LinkedIn',
       email: 'Email Me',
       highlightsTitle: 'Quick Highlights',
+      statementLine1: 'Web Design is',
+      statementLine2: 'new pop art.',
+      daysCounterTemplate:
+        'I have lived on this planet for {days1}, of which {days2} the Russian Federation has been committing aggression against me and my country, of which {days3} have been the full-scale invasion.',
     },
     wishlist: {
       title: 'Wishlist',

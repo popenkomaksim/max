@@ -2,11 +2,38 @@ import { Github, Linkedin, Mail } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext.jsx'
 import { translations } from '../i18n/translations.js'
 import profile from '../data/profile.json'
+import AnimatedText from '../components/AnimatedText.jsx'
+import { daysSince, formatDays } from '../lib/daysCounter.js'
+
+function renderDaysCounter(template, values) {
+  const tokens = ['{days1}', '{days2}', '{days3}']
+  return template
+    .split(new RegExp(`(${tokens.map((token) => token.replace(/[{}]/g, '\\$&')).join('|')})`))
+    .map((part, i) => {
+      const index = tokens.indexOf(part)
+      if (index === -1) return part
+      return (
+        <strong
+          key={i}
+          className="font-semibold text-slate-900 dark:text-white"
+        >
+          {values[index]}
+        </strong>
+      )
+    })
+}
 
 export default function Home() {
   const { lang } = useLanguage()
   const t = translations[lang]
   const p = profile[lang]
+  const statementLine1 = t.home.statementLine1
+  const statementLine2 = t.home.statementLine2
+  const line1LetterCount = statementLine1.replace(/\s/g, '').length
+
+  const daysAlive = formatDays(daysSince(8, 9, 1990), lang)
+  const daysOfAggression = formatDays(daysSince(20, 2, 2014), lang)
+  const daysOfFullScaleInvasion = formatDays(daysSince(24, 2, 2022), lang)
 
   return (
     <div className="flex flex-col gap-14">
@@ -44,6 +71,28 @@ export default function Home() {
             <Mail size={18} /> {t.home.email}
           </a>
         </div>
+      </section>
+
+      <section className="max-w-2xl rounded-lg border border-slate-200 bg-white px-5 py-4 text-slate-600 dark:border-slate-800 dark:bg-slate-800/50 dark:text-slate-300">
+        <p>
+          {renderDaysCounter(t.home.daysCounterTemplate, [
+            daysAlive,
+            daysOfAggression,
+            daysOfFullScaleInvasion,
+          ])}
+        </p>
+      </section>
+
+      <section>
+        <h2 className="text-4xl font-bold leading-[1.1] tracking-tight sm:text-6xl">
+          <AnimatedText text={statementLine1} className="text-slate-900 dark:text-white" />
+          <br />
+          <AnimatedText
+            text={statementLine2}
+            startDelay={line1LetterCount * 0.035}
+            className="text-slate-400 dark:text-slate-500"
+          />
+        </h2>
       </section>
 
       <section>
