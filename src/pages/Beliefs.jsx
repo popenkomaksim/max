@@ -7,27 +7,30 @@ export default function Beliefs() {
   const t = translations[lang]
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-16">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">{t.beliefs.title}</h1>
-        <p className="mt-2 text-slate-600 dark:text-slate-300">{t.beliefs.subtitle}</p>
+        <p className="mt-3 text-slate-600 dark:text-slate-300">{t.beliefs.subtitle}</p>
       </div>
 
-      <ol className="flex flex-col gap-6">
+      <ol className="flex flex-col">
         {beliefs.map((belief, index) => {
           const b = belief[lang]
           return (
             <li
               key={belief.id}
-              className="rounded-xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-800/50"
+              className="border-t border-slate-200 py-10 first:border-t-0 first:pt-0 dark:border-slate-800"
             >
-              <h2 className="flex items-start gap-3 text-lg font-semibold">
-                <span className="text-indigo-600 dark:text-indigo-400">{String(index + 1).padStart(2, '0')}</span>
+              <h2 className="flex items-baseline gap-4 text-lg font-semibold">
+                <span className="font-mono text-sm font-normal text-slate-400 dark:text-slate-600">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
                 {b.heading}
               </h2>
-              <ul className="mt-3 flex flex-col gap-2 pl-9">
+              <ul className="mt-4 flex flex-col gap-2.5 pl-9">
                 {b.points.map((point) => (
-                  <li key={point} className="list-disc text-slate-600 marker:text-slate-400 dark:text-slate-300">
+                  <li key={point} className="text-slate-600 dark:text-slate-300">
+                    <span className="mr-2 text-slate-300 dark:text-slate-700">—</span>
                     {point}
                   </li>
                 ))}
