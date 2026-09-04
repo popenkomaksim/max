@@ -1,5 +1,24 @@
 [
   {
+    "id": "fortune-favors-the-bold",
+    "uk": {
+      "heading": "Сміливі завжди мають щастя",
+      "points": [
+        "Той, хто не пробує, ніколи не дізнається, що було можливим",
+        "Ризик, зважений і усвідомлений, відкриває шанси, яких не бачать обережні",
+        "Рішучість у невизначеності — це і є більшість успіху"
+      ]
+    },
+    "en": {
+      "heading": "Fortune favors the bold",
+      "points": [
+        "Those who never try never learn what was possible",
+        "Measured, deliberate risk opens chances the cautious never see",
+        "Deciding under uncertainty is most of what success is made of"
+      ]
+    }
+  },
+  {
     "id": "ship-then-polish",
     "uk": {
       "heading": "Краще випустити і допрацювати, ніж відточувати в шухляді",
@@ -91,6 +110,25 @@
         "Progress at altitude is slow and nonlinear — so is progress on hard projects",
         "Bad weather happens regardless of the plan; what matters is how you react",
         "The best view only rewards the people who didn't turn back halfway"
+      ]
+    }
+  },
+  {
+    "id": "carpe-diem",
+    "uk": {
+      "heading": "Carpe diem — лови момент",
+      "points": [
+        "Завтрашній день не гарантований, тож цінність має те, що робиш сьогодні",
+        "Найкраща нагода рідко чекає, поки ти будеш повністю готовий",
+        "Жалкувати про нездійснене боляче довше, ніж про невдалу спробу"
+      ]
+    },
+    "en": {
+      "heading": "Carpe diem — seize the day",
+      "points": [
+        "Tomorrow isn't guaranteed, so what you do today is what counts",
+        "The best opportunity rarely waits until you feel fully ready",
+        "Regretting what you never tried hurts longer than a failed attempt"
       ]
     }
   }
