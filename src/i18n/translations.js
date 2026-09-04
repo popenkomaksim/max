@@ -4,6 +4,7 @@ export const translations = {
       home: 'Головна',
       wishlist: 'Список бажань',
       about: 'Про мене',
+      beliefs: 'Переконання',
     },
     footer: {
       vibecoded: 'Вайбкодено в Києві, Україна',
@@ -46,6 +47,10 @@ export const translations = {
       workTitle: 'Досвід',
       mountainsTitle: 'Гори',
     },
+    beliefs: {
+      title: 'Переконання',
+      subtitle: 'Речі, у які я вірю зараз — може змінитись, коли з’являться кращі аргументи.',
+    },
     thankYou: {
       title: 'Дякую!',
       message: 'Дякую, що завітали і за вашу підтримку — це справді багато для мене значить.',
@@ -78,6 +83,7 @@ export const translations = {
       home: 'Home',
       wishlist: 'Wishlist',
       about: 'About',
+      beliefs: 'Beliefs',
     },
     footer: {
       vibecoded: 'Vibecoded in Kyiv, Ukraine',
@@ -119,6 +125,10 @@ export const translations = {
       subtitle: "A brief timeline of where I've worked and studied.",
       workTitle: 'Experience',
       mountainsTitle: 'Mountains',
+    },
+    beliefs: {
+      title: 'Beliefs',
+      subtitle: "Things I currently believe — subject to change when I hear a better argument.",
     },
     thankYou: {
       title: 'Thank You!',

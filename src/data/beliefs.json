@@ -1,0 +1,97 @@
+[
+  {
+    "id": "ship-then-polish",
+    "uk": {
+      "heading": "Краще випустити і допрацювати, ніж відточувати в шухляді",
+      "points": [
+        "Реальні користувачі знаходять проблеми, які не побачить жодне планування",
+        "Маленькі релізи зменшують ризик і прискорюють навчання",
+        "Ідеальний план програє робочому прототипу"
+      ]
+    },
+    "en": {
+      "heading": "Ship it, then sharpen it",
+      "points": [
+        "Real users surface problems no amount of planning will",
+        "Small releases lower risk and speed up learning",
+        "A working prototype beats a perfect plan"
+      ]
+    }
+  },
+  {
+    "id": "clarity-over-cleverness",
+    "uk": {
+      "heading": "Зрозумілий код кращий за розумний код",
+      "points": [
+        "Код читають набагато частіше, ніж пишуть",
+        "Якщо рішення важко пояснити колезі — воно, ймовірно, занадто складне",
+        "Прості абстракції легше змінювати, коли вимоги зміняться"
+      ]
+    },
+    "en": {
+      "heading": "Clear code beats clever code",
+      "points": [
+        "Code is read far more often than it's written",
+        "If it's hard to explain to a teammate, it's probably too clever",
+        "Simple abstractions are easier to change when requirements shift"
+      ]
+    }
+  },
+  {
+    "id": "no-career-ceiling",
+    "uk": {
+      "heading": "У кар'єрі немає стелі, є лише темп",
+      "points": [
+        "Послідовні маленькі кроки переважають талант без дисципліни",
+        "Некомфортні задачі — найшвидший спосіб рости",
+        "Можна наздогнати будь-який досвід, якщо продовжувати вчитися"
+      ]
+    },
+    "en": {
+      "heading": "There's no career ceiling, only pace",
+      "points": [
+        "Consistent small steps beat talent without discipline",
+        "Uncomfortable work is the fastest way to grow",
+        "Any head start can be caught up to if you keep learning"
+      ]
+    }
+  },
+  {
+    "id": "assume-good-intent",
+    "uk": {
+      "heading": "Спершу — довіра, а не підозра",
+      "points": [
+        "Більшість людей роблять усе можливе з тим, що знають у цей момент",
+        "Різкий тон у чаті частіше означає поганий день, а не погані наміри",
+        "Довіра прискорює команду; постійна перевірка — сповільнює"
+      ]
+    },
+    "en": {
+      "heading": "Default to trust, not suspicion",
+      "points": [
+        "Most people are doing their best with what they know at the time",
+        "A sharp tone in chat is usually a bad day, not bad intent",
+        "Trust speeds a team up; constant double-checking slows it down"
+      ]
+    }
+  },
+  {
+    "id": "mountains-teach-patience",
+    "uk": {
+      "heading": "Гори вчать терпіння краще за будь-який курс з менеджменту",
+      "points": [
+        "Прогрес на висоті повільний і нелінійний — як і в складних проєктах",
+        "Погана погода трапляється незалежно від плану — важливо, як ти реагуєш",
+        "Найкращий вид відкривається лише тим, хто не зійшов на півдорозі"
+      ]
+    },
+    "en": {
+      "heading": "Mountains teach patience better than any management course",
+      "points": [
+        "Progress at altitude is slow and nonlinear — so is progress on hard projects",
+        "Bad weather happens regardless of the plan; what matters is how you react",
+        "The best view only rewards the people who didn't turn back halfway"
+      ]
+    }
+  }
+]
