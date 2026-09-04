@@ -7,6 +7,8 @@ Personal single-page site built with React, Vite, Tailwind CSS, and `react-route
 - `/` — Home: bio, highlights, contact links
 - `/wishlist` — Item tracker with category filter and acquired toggle
 - `/about` — Experience timeline
+- `/beliefs` — Things I currently believe
+- `/guidelines` — Web interface guidelines, inspired by interfaces.rauno.me
 
 ## Development
 

@@ -1,0 +1,205 @@
+[
+  {
+    "id": "interactivity",
+    "uk": {
+      "heading": "Взаємодія",
+      "points": [
+        "Мітки полів вводу мають бути клікабельними — клік фокусує відповідне поле",
+        "Огортайте поля вводу тегом `<form>`, щоб Enter надсилав форму",
+        "Використовуйте відповідні типи полів (password, email тощо)",
+        "Як правило, вимикайте `spellcheck` та `autocomplete` на полях вводу",
+        "Використовуйте HTML-валідацію форм через атрибут `required`, коли потрібно",
+        "Розташовуйте префікси/суфікси абсолютним позиціюванням поверх тексту з відступом — клік по них теж має фокусувати поле",
+        "Перемикачі (toggle) мають діяти миттєво, без підтвердження",
+        "Вимикайте кнопки після відправки, щоб запобігти дублюванню запитів",
+        "Прибирайте `user-select` з вмісту інтерактивних елементів",
+        "Застосовуйте `pointer-events: none` до декоративних елементів (світіння, градієнти)",
+        "У вертикальних/горизонтальних списках прибирайте «мертві зони» між елементами, збільшуючи відступи"
+      ]
+    },
+    "en": {
+      "heading": "Interactivity",
+      "points": [
+        "Input labels should be clickable to focus the associated field",
+        "Wrap inputs in `<form>` tags to enable Enter key submission",
+        "Use appropriate input types (password, email, etc.)",
+        "Typically disable `spellcheck` and `autocomplete` on inputs",
+        "Use HTML form validation with the `required` attribute when needed",
+        "Position prefix/suffix decorations absolutely over text with padding; they should trigger focus",
+        "Toggles should take immediate effect without confirmation",
+        "Disable buttons after submission to prevent duplicate requests",
+        "Remove `user-select` from interactive element content",
+        "Apply `pointer-events: none` to decorative elements (glows, gradients)",
+        "In vertical/horizontal lists, eliminate dead areas between elements by increasing padding"
+      ]
+    }
+  },
+  {
+    "id": "typography",
+    "uk": {
+      "heading": "Типографіка",
+      "points": [
+        "Застосовуйте `-webkit-font-smoothing: antialiased` для кращої читабельності",
+        "Застосовуйте `text-rendering: optimizeLegibility` для кращої читабельності",
+        "Створюйте субсети шрифтів під потрібний контент, алфавіт або мову",
+        "Не змінюйте товщину шрифту на hover/active станах, щоб уникнути зсуву макета",
+        "Уникайте накреслень тонших за 400",
+        "Для заголовків середнього розміру використовуйте накреслення 500–600",
+        "Плавно масштабуйте розміри за допомогою CSS `clamp()`",
+        "Використовуйте `font-variant-numeric: tabular-nums` у таблицях та індикаторах часу",
+        "Запобігайте авто-збільшенню тексту в альбомній орієнтації iOS через `-webkit-text-size-adjust: 100%`"
+      ]
+    },
+    "en": {
+      "heading": "Typography",
+      "points": [
+        "Apply `-webkit-font-smoothing: antialiased` for legibility",
+        "Apply `text-rendering: optimizeLegibility` for legibility",
+        "Subset fonts based on relevant content, alphabet, or language",
+        "Prevent font weight changes on hover/selected states to avoid layout shifts",
+        "Avoid font weights below 400",
+        "Use weights 500–600 for medium-sized headings",
+        "Adjust values fluidly with CSS `clamp()` for responsive sizing",
+        "Use `font-variant-numeric: tabular-nums` in tables or timing displays",
+        "Prevent iOS landscape text resizing with `-webkit-text-size-adjust: 100%`"
+      ]
+    }
+  },
+  {
+    "id": "motion",
+    "uk": {
+      "heading": "Анімація",
+      "points": [
+        "Перемикання теми не повинно запускати переходи/анімації",
+        "Тримайте тривалість анімації до 200 мс, щоб реакція відчувалася миттєвою",
+        "Масштабуйте параметри анімації пропорційно до розміру тригера (діалоги — fade/scale від ~0.8; кнопки при натисканні — до ~0.96)",
+        "Уникайте анімацій для частих, звичних дій (контекстні меню, операції зі списками, прості hover-стани)",
+        "Зупиняйте циклічні анімації поза екраном, щоб знизити навантаження на CPU/GPU",
+        "Використовуйте `scroll-behavior: smooth` для навігації якорями на сторінці, з відповідним відступом"
+      ]
+    },
+    "en": {
+      "heading": "Motion",
+      "points": [
+        "Theme switching shouldn't trigger transitions/animations",
+        "Keep animation duration under 200ms for an immediate feel",
+        "Scale animation values proportionally to trigger size (dialogs fade/scale from ~0.8; buttons press to ~0.96)",
+        "Avoid animations for frequent, low-novelty actions (right-click menus, list operations, trivial hovers)",
+        "Pause looping animations when off-screen to reduce CPU/GPU usage",
+        "Use `scroll-behavior: smooth` for in-page anchor navigation with an appropriate offset"
+      ]
+    }
+  },
+  {
+    "id": "touch",
+    "uk": {
+      "heading": "Сенсорні пристрої",
+      "points": [
+        "Приховуйте hover-стани на сенсорних пристроях через `@media (hover: hover)`",
+        "Тримайте розмір шрифту полів вводу від 16px, щоб запобігти авто-зуму в iOS",
+        "Не встановлюйте автофокус на полях на сенсорних пристроях",
+        "Додавайте `muted` і `playsinline` до тегів `<video>` для автовідтворення в iOS",
+        "Вимикайте `touch-action` для власних компонентів pan/zoom",
+        "Вимикайте стандартне підсвічування тапу в iOS через `-webkit-tap-highlight-color: rgba(0,0,0,0)`, але передбачте альтернативну візуальну реакцію"
+      ]
+    },
+    "en": {
+      "heading": "Touch",
+      "points": [
+        "Hide hover states on touch using `@media (hover: hover)`",
+        "Keep input font size at least 16px to prevent iOS auto-zoom",
+        "Don't auto-focus inputs on touch devices",
+        "Add `muted` and `playsinline` to `<video>` tags for iOS autoplay",
+        "Disable `touch-action` for custom pan/zoom components",
+        "Disable the default iOS tap highlight with `-webkit-tap-highlight-color: rgba(0,0,0,0)`, but provide an alternative"
+      ]
+    }
+  },
+  {
+    "id": "optimizations",
+    "uk": {
+      "heading": "Оптимізації",
+      "points": [
+        "Великі значення фільтра `blur()` можуть уповільнювати рендер",
+        "Масштабування/розмиття залитих прямокутників спричиняє банддінг — замість цього використовуйте радіальні градієнти",
+        "Обережно вмикайте GPU-рендеринг через `transform: translateZ(0)` для проблемних анімацій",
+        "Вмикайте `will-change` лише на час анімацій скролу, що просідають по продуктивності",
+        "Зупиняйте або демонтуйте відео поза екраном, щоб уникнути проблем із продуктивністю в iOS",
+        "Використовуйте refs, щоб оминути цикл рендеру React для значень DOM у реальному часі",
+        "Визначайте можливості пристрою та мережі користувача й адаптуйтесь під них"
+      ]
+    },
+    "en": {
+      "heading": "Optimizations",
+      "points": [
+        "Large `blur()` filter values may be slow",
+        "Scaling/blurring filled rectangles causes banding; use radial gradients instead",
+        "Sparingly enable GPU rendering via `transform: translateZ(0)` for problematic animations",
+        "Toggle `will-change` only during unperformant scroll animations",
+        "Pause or unmount off-screen videos to prevent iOS performance issues",
+        "Use refs to bypass React's render lifecycle for real-time DOM values",
+        "Detect and adapt to user device hardware and network capabilities"
+      ]
+    }
+  },
+  {
+    "id": "accessibility",
+    "uk": {
+      "heading": "Доступність",
+      "points": [
+        "Не додавайте тултипи до вимкнених кнопок — вони недоступні для користувачів клавіатури",
+        "Для кільця фокусу використовуйте `box-shadow`, а не `outline` — так зберігається border-radius",
+        "Робіть послідовні списки з фокусом навіговними стрілками (↑ ↓)",
+        "Дозволяйте видаляти елементи такого списку через ⌘ Backspace",
+        "Відкривайте випадні меню на `mousedown`, а не `click`, для миттєвої реакції",
+        "Використовуйте SVG-фавікони зі style-тегами, що враховують системну тему через `prefers-color-scheme`",
+        "Задавайте явний `aria-label` для інтерактивних елементів лише з іконкою",
+        "Не додавайте інтерактивний вміст у тултипи, що з'являються на hover",
+        "Завжди рендеріть зображення через тег `<img>` — для скрінрідерів і контекстного меню",
+        "Для ілюстрацій, побудованих на HTML, задавайте явний `aria-label` замість відкритого DOM",
+        "Прибирайте градієнти з тексту в стані `::selection`",
+        "Реалізуйте «конус передбачення» у вкладених меню, щоб запобігти випадковому закриттю"
+      ]
+    },
+    "en": {
+      "heading": "Accessibility",
+      "points": [
+        "Don't add tooltips to disabled buttons (inaccessible to keyboard users)",
+        "Use `box-shadow` for focus rings rather than `outline` (respects border radius)",
+        "Make sequential focusable lists navigable with arrow keys (↑ ↓)",
+        "Enable deletion of sequential focusable items with ⌘ Backspace",
+        "Trigger dropdown menus on `mousedown` rather than `click` for immediate opening",
+        "Use SVG favicons with style tags adhering to the system theme via `prefers-color-scheme`",
+        "Define an explicit `aria-label` for icon-only interactive elements",
+        "Don't include interactive content in hover-triggered tooltips",
+        "Always render images with `<img>` tags for screen readers and context menu access",
+        "Use an explicit `aria-label` for HTML-built illustrations instead of exposing raw DOM",
+        "Remove gradients from text during the `::selection` state",
+        "Implement prediction cones in nested menus to prevent accidental closure"
+      ]
+    }
+  },
+  {
+    "id": "design",
+    "uk": {
+      "heading": "Дизайн",
+      "points": [
+        "Оптимістично оновлюйте дані локально й відкочуйте їх у разі помилки сервера, повідомляючи про це",
+        "Обробляйте редиректи автентифікації на сервері до завантаження клієнта, щоб уникнути «стрибків» URL",
+        "Стилізуйте виділення тексту через `::selection`",
+        "Показуйте зворотний зв'язок біля тригера (інлайн-галочка при копіюванні, підсвітка поля при помилці форми)",
+        "У порожніх станах пропонуйте створити елемент, за бажанням — із шаблонами"
+      ]
+    },
+    "en": {
+      "heading": "Design",
+      "points": [
+        "Optimistically update data locally and roll back on server error with feedback",
+        "Handle authentication redirects server-side before client loads to prevent janky URL changes",
+        "Style document selection with `::selection`",
+        "Display feedback relative to its trigger (inline checkmarks for copy success; highlight inputs on form errors)",
+        "Have empty states prompt item creation, optionally with templates"
+      ]
+    }
+  }
+]

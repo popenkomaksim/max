@@ -5,6 +5,7 @@ export const translations = {
       wishlist: 'Список бажань',
       about: 'Про мене',
       beliefs: 'Переконання',
+      guidelines: 'Гайдлайни',
     },
     footer: {
       vibecoded: 'Вайбкодено в Києві, Україна',
@@ -55,6 +56,10 @@ export const translations = {
       title: 'Переконання',
       subtitle: 'Речі, у які я вірю зараз — може змінитись, коли з’являться кращі аргументи.',
     },
+    guidelines: {
+      title: 'Гайдлайни',
+      subtitle: 'Практичні поради для якісних веб-інтерфейсів. Натхненно',
+    },
     thankYou: {
       title: 'Дякую!',
       message: 'Дякую, що завітали і за вашу підтримку — це справді багато для мене значить.',
@@ -88,6 +93,7 @@ export const translations = {
       wishlist: 'Wishlist',
       about: 'About',
       beliefs: 'Beliefs',
+      guidelines: 'Guidelines',
     },
     footer: {
       vibecoded: 'Vibecoded in Kyiv, Ukraine',
@@ -137,6 +143,10 @@ export const translations = {
     beliefs: {
       title: 'Beliefs',
       subtitle: "Things I currently believe — subject to change when I hear a better argument.",
+    },
+    guidelines: {
+      title: 'Guidelines',
+      subtitle: 'Practical notes for building good web interfaces. Inspired by',
     },
     thankYou: {
       title: 'Thank You!',

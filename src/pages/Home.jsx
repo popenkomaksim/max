@@ -3,6 +3,7 @@ import { useLanguage } from '../context/LanguageContext.jsx'
 import { translations } from '../i18n/translations.js'
 import profile from '../data/profile.json'
 import AnimatedText from '../components/AnimatedText.jsx'
+import ScrambleText from '../components/ScrambleText.jsx'
 import { daysSince, formatDays } from '../lib/daysCounter.js'
 
 function renderDaysCounter(template, values) {
@@ -12,13 +13,14 @@ function renderDaysCounter(template, values) {
     .map((part, i) => {
       const index = tokens.indexOf(part)
       if (index === -1) return part
+      const { text, startDelay } = values[index]
       return (
-        <strong
+        <ScrambleText
           key={i}
+          text={text}
+          startDelay={startDelay}
           className="font-semibold text-slate-900 dark:text-white"
-        >
-          {values[index]}
-        </strong>
+        />
       )
     })
 }
@@ -76,9 +78,9 @@ export default function Home() {
       <section className="max-w-2xl rounded-lg border border-slate-200 bg-white px-5 py-4 text-slate-600 dark:border-slate-800 dark:bg-slate-800/50 dark:text-slate-300">
         <p>
           {renderDaysCounter(t.home.daysCounterTemplate, [
-            daysAlive,
-            daysOfAggression,
-            daysOfFullScaleInvasion,
+            { text: daysAlive, startDelay: 0 },
+            { text: daysOfAggression, startDelay: 0.4 },
+            { text: daysOfFullScaleInvasion, startDelay: 0.8 },
           ])}
         </p>
       </section>

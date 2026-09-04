@@ -24,6 +24,7 @@ export default function Navbar() {
     { to: '/wishlist', label: t.nav.wishlist },
     { to: '/about', label: t.nav.about },
     { to: '/beliefs', label: t.nav.beliefs },
+    { to: '/guidelines', label: t.nav.guidelines },
   ]
 
   return (
