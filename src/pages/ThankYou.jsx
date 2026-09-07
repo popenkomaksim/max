@@ -11,6 +11,8 @@ export default function ThankYou() {
       <img
         src="/mountains.jpg"
         alt={t.thankYou.imageAlt}
+        width={240}
+        height={240}
         className="h-60 w-60 rounded-full object-cover shadow-lg"
       />
       <div>

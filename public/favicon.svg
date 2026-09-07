@@ -1,4 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
-  <rect width="24" height="24" rx="6" fill="#4f46e5"/>
-  <text x="12" y="17" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="white" text-anchor="middle">A</text>
+  <style>
+    .tile { fill: #4f46e5 }
+    .glyph { fill: #ffffff }
+    /* The tab strip is dark in dark mode; a saturated indigo tile goes muddy
+       against it, so the pair inverts. */
+    @media (prefers-color-scheme: dark) {
+      .tile { fill: #818cf8 }
+      .glyph { fill: #0f172a }
+    }
+  </style>
+  <rect class="tile" width="24" height="24" rx="6"/>
+  <text class="glyph" x="12" y="17" font-family="system-ui, sans-serif" font-size="13" font-weight="700" text-anchor="middle">A</text>
 </svg>

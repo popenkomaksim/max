@@ -1,6 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: 'class',
+  future: {
+    // Compiles every `hover:` utility inside `@media (hover: hover)`, so touch
+    // devices never latch a hover state after a tap.
+    hoverOnlyWhenSupported: true,
+  },
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {

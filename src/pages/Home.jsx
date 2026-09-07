@@ -86,7 +86,7 @@ export default function Home() {
       </p>
 
       <section className="pt-12">
-        <p className="font-serif text-2xl italic leading-tight tracking-tight sm:text-3xl">
+        <p className="font-serif text-[clamp(1.5rem,1.15rem+1.75vw,1.875rem)] italic leading-tight tracking-tight">
           <AnimatedText
             text={t.home.statementLine1}
             startDelay={STATEMENT_DELAY}

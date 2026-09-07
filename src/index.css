@@ -4,6 +4,43 @@
 
 html {
   scroll-behavior: smooth;
+  /* Anchored headings clear the sticky navbar instead of parking under it. */
+  scroll-padding-top: 5rem;
+  /* iOS otherwise inflates copy in landscape. */
+  -webkit-text-size-adjust: 100%;
+  /* Suppress the grey iOS tap flash; every interactive element below supplies
+     its own hover/active/focus feedback in its place. */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+/* A ring drawn with box-shadow follows the element's border-radius, which an
+   `outline` does not. The inner band is the page ground, so the ring reads as
+   detached on both themes. */
+:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px theme('colors.white'),
+    0 0 0 4px theme('colors.indigo.500');
+}
+
+.dark :focus-visible,
+.dark:focus-visible {
+  box-shadow:
+    0 0 0 2px theme('colors.slate.900'),
+    0 0 0 4px theme('colors.indigo.400');
+}
+
+::selection {
+  @apply bg-indigo-500/25 text-slate-900 dark:bg-indigo-400/30 dark:text-white;
+}
+
+/* Flipping the theme repaints nearly every colour on the page. Without this
+   the whole document would cross-fade for the length of its own transitions;
+   `useDarkMode` hangs this class on <html> for the duration of the swap. */
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: none !important;
 }
 
 body {
@@ -25,8 +62,13 @@ body {
     @apply pointer-events-none absolute bottom-0 left-0 right-0 h-px rounded-sm bg-slate-300 transition-[background-color] duration-200 ease-out dark:bg-slate-600;
   }
 
-  .basic-link:hover::before {
-    @apply bg-slate-500 dark:bg-slate-300;
+  /* Hand-written, so it misses the `hoverOnlyWhenSupported` wrapping Tailwind
+     applies to `hover:` utilities — guard it by hand or a tap on touch leaves
+     the rule darkened until the next tap elsewhere. */
+  @media (hover: hover) {
+    .basic-link:hover::before {
+      @apply bg-slate-500 dark:bg-slate-300;
+    }
   }
 
   /* Solid call-to-action, used for the "back home" links on the ThankYou and
@@ -60,6 +102,10 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .animate-letter-in,
   .chrome-in,
   .stagger > * {

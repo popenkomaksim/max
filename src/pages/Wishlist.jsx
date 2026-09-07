@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ExternalLink, Check } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext.jsx'
 import { translations } from '../i18n/translations.js'
@@ -44,6 +44,7 @@ export default function Wishlist() {
   const [hideAcquired, setHideAcquired] = useState(false)
   const [currency, setCurrency] = useState(() => (readString(CURRENCY_KEY) === 'USD' ? 'USD' : 'UAH'))
   const { rate, error: rateError } = useUsdToUahRate()
+  const filterRowRef = useRef(null)
   // Keep the UAH button selected (and the "rate unavailable" note visible) but
   // show USD figures when the rate lookup failed — ₴ prices would be a guess.
   const effectiveCurrency = currency === 'UAH' && rateError ? 'USD' : currency
@@ -85,6 +86,28 @@ export default function Wishlist() {
     setAcquiredOverrides((prev) => ({ ...prev, [id]: !current }))
   }
 
+  function resetFilters() {
+    setCategoryFilter('all')
+    setHideAcquired(false)
+  }
+
+  // Arrow keys walk the filter row, so it behaves like one control rather than
+  // a run of separate tab stops. Focus is read and moved straight off the DOM
+  // — there's no React state that needs to know which chip is focused.
+  function handleFilterKeyDown(event) {
+    const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[event.key]
+    if (!step) return
+
+    // Chips only — the currency pair is nested in the same row but is its own
+    // group, so arrow keys shouldn't walk out of one and into the other.
+    const buttons = Array.from(filterRowRef.current?.querySelectorAll('[data-filter-chip]') ?? [])
+    const current = buttons.indexOf(document.activeElement)
+    if (current === -1) return
+
+    event.preventDefault()
+    buttons[(current + step + buttons.length) % buttons.length].focus()
+  }
+
   return (
     <div className="flex flex-col gap-8">
       {new Date() < SUPPORT_BANNER_DEADLINE && (
@@ -102,12 +125,12 @@ export default function Wishlist() {
         <h1 className="text-3xl font-bold tracking-tight">{t.wishlist.title}</h1>
         <p className="mt-2 text-slate-600 dark:text-slate-300">
           {t.wishlist.subtitlePrefix}{' '}
-          <span className="font-semibold text-slate-900 dark:text-white">
+          <span className="font-semibold tabular-nums text-slate-900 dark:text-white">
             {formatPrice(totalValue, effectiveCurrency, rate)}
           </span>
         </p>
         {currency === 'UAH' && (
-          <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+          <p className="mt-1 text-xs tabular-nums text-slate-400 dark:text-slate-500">
             {rateError
               ? t.wishlist.rateUnavailable
               : rate
@@ -118,13 +141,15 @@ export default function Wishlist() {
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap gap-2">
+        <div ref={filterRowRef} onKeyDown={handleFilterKeyDown} className="flex flex-wrap gap-2">
           {categories.map((category) => (
             <button
               key={category}
               type="button"
               onClick={() => setCategoryFilter(category)}
-              className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+              aria-pressed={categoryFilter === category}
+              data-filter-chip=""
+              className={`select-none rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
                 categoryFilter === category
                   ? 'bg-indigo-600 text-white'
                   : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700'
@@ -139,7 +164,8 @@ export default function Wishlist() {
                 key={c}
                 type="button"
                 onClick={() => setCurrency(c)}
-                className={`rounded-full px-3 py-1 text-sm font-medium transition-colors ${
+                aria-pressed={currency === c}
+                className={`select-none rounded-full px-3 py-1 text-sm font-medium transition-colors ${
                   currency === c
                     ? 'bg-indigo-600 text-white'
                     : 'text-slate-700 hover:bg-slate-200 dark:text-slate-200 dark:hover:bg-slate-700'
@@ -151,7 +177,7 @@ export default function Wishlist() {
           </div>
         </div>
 
-        <label className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+        <label className="flex cursor-pointer select-none items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
           <input
             type="checkbox"
             checked={hideAcquired}
@@ -166,11 +192,11 @@ export default function Wishlist() {
         <table className="w-full text-left text-sm">
           <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-800/60 dark:text-slate-400">
             <tr>
-              <th className="px-4 py-3">{t.wishlist.colItem}</th>
-              <th className="px-4 py-3">{t.wishlist.colCategory}</th>
-              <th className="px-4 py-3">{t.wishlist.colPriority}</th>
-              <th className="px-4 py-3">{t.wishlist.colPrice}</th>
-              <th className="px-4 py-3">{t.wishlist.colAcquired}</th>
+              <th scope="col" className="px-4 py-3">{t.wishlist.colItem}</th>
+              <th scope="col" className="px-4 py-3">{t.wishlist.colCategory}</th>
+              <th scope="col" className="px-4 py-3">{t.wishlist.colPriority}</th>
+              <th scope="col" className="px-4 py-3">{t.wishlist.colPrice}</th>
+              <th scope="col" className="px-4 py-3">{t.wishlist.colAcquired}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
@@ -203,7 +229,7 @@ export default function Wishlist() {
                       {t.priority[item.priorityKey]}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">
+                  <td className="px-4 py-3 tabular-nums text-slate-600 dark:text-slate-300">
                     {formatPrice(item.price, effectiveCurrency, rate)}
                   </td>
                   <td className="px-4 py-3">
@@ -211,7 +237,10 @@ export default function Wishlist() {
                       type="button"
                       onClick={() => toggleAcquired(item.id, item.acquired)}
                       aria-pressed={item.acquired}
-                      className={`inline-flex h-6 w-6 items-center justify-center rounded-md border transition-colors ${
+                      aria-label={`${
+                        item.acquired ? t.wishlist.markNotAcquired : t.wishlist.markAcquired
+                      }: ${i.name}`}
+                      className={`inline-flex h-6 w-6 select-none items-center justify-center rounded-md border transition-colors ${
                         item.acquired
                           ? 'border-emerald-500 bg-emerald-500 text-white'
                           : 'border-slate-300 text-transparent hover:border-slate-400 dark:border-slate-700'
@@ -226,7 +255,18 @@ export default function Wishlist() {
           </tbody>
         </table>
         {visibleItems.length === 0 && (
-          <p className="px-4 py-6 text-center text-slate-500 dark:text-slate-400">{t.wishlist.empty}</p>
+          // An empty state should hand back the action that resolves it; on a
+          // read-only list that's clearing the filters that emptied it.
+          <div className="flex flex-col items-center gap-3 px-4 py-8 text-center">
+            <p className="text-slate-500 dark:text-slate-400">{t.wishlist.empty}</p>
+            <button
+              type="button"
+              onClick={resetFilters}
+              className="select-none rounded-full bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+            >
+              {t.wishlist.emptyReset}
+            </button>
+          </div>
         )}
       </div>
     </div>

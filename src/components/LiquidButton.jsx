@@ -37,7 +37,7 @@ export default function LiquidButton({
           onClick?.()
         }
       }}
-      className={`liquid-button cursor-pointer font-sans text-sm font-bold uppercase tracking-wide outline-none ${className}`}
+      className={`liquid-button cursor-pointer select-none rounded-2xl font-sans text-sm font-bold uppercase tracking-wide ${className}`}
       data-hover-factor="-10"
       data-width={width}
       data-height={height}
