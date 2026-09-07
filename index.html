@@ -26,11 +26,18 @@
       }
     </script>
     <script>
-      // Respect the OS/browser preference before React mounts, so there's no
-      // flash of the wrong theme on first paint.
+      // An explicit light/dark choice wins; 'system' and a missing key both
+      // mean "follow the OS". Runs before React mounts, so there's no flash of
+      // the wrong theme on first paint.
+      var storedTheme = null
+      try {
+        storedTheme = localStorage.theme
+      } catch (error) {
+        // Storage blocked (Safari private mode) — fall through to the OS.
+      }
       if (
-        localStorage.theme === 'dark' ||
-        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        storedTheme === 'dark' ||
+        (storedTheme !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches)
       ) {
         document.documentElement.classList.add('dark')
       }
@@ -38,8 +45,8 @@
       var storedLang = localStorage.lang
       document.documentElement.lang = storedLang === 'en' ? 'en' : 'uk'
     </script>
-    <script type="module" crossorigin src="/assets/index-62V7bg0C.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-B2BQYbR7.css">
+    <script type="module" crossorigin src="/assets/index-BtANYKze.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-R1YEw63Y.css">
   </head>
   <body class="bg-white dark:bg-slate-900">
     <div id="root"></div>
