@@ -3,7 +3,7 @@ export function daysSince(day, month, year) {
   const startUTC = Date.UTC(year, month - 1, day)
   const now = new Date()
   const nowUTC = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())
-  return Math.floor((nowUTC - startUTC) / 86400000)
+  return Math.ceil((nowUTC - startUTC) / 86400000)
 }
 
 function pluralizeUk(n, one, few, many) {
