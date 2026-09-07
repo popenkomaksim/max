@@ -26,11 +26,18 @@
       }
     </script>
     <script>
-      // Respect the OS/browser preference before React mounts, so there's no
-      // flash of the wrong theme on first paint.
+      // An explicit light/dark choice wins; 'system' and a missing key both
+      // mean "follow the OS". Runs before React mounts, so there's no flash of
+      // the wrong theme on first paint.
+      var storedTheme = null
+      try {
+        storedTheme = localStorage.theme
+      } catch (error) {
+        // Storage blocked (Safari private mode) — fall through to the OS.
+      }
       if (
-        localStorage.theme === 'dark' ||
-        (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+        storedTheme === 'dark' ||
+        (storedTheme !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches)
       ) {
         document.documentElement.classList.add('dark')
       }

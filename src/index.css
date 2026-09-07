@@ -36,7 +36,7 @@ html {
 
 /* Flipping the theme repaints nearly every colour on the page. Without this
    the whole document would cross-fade for the length of its own transitions;
-   `useDarkMode` hangs this class on <html> for the duration of the swap. */
+   `useTheme` hangs this class on <html> for the duration of the swap. */
 .theme-switching *,
 .theme-switching *::before,
 .theme-switching *::after {
@@ -69,6 +69,27 @@ body {
     .basic-link:hover::before {
       @apply bg-slate-500 dark:bg-slate-300;
     }
+  }
+
+  /* The birthday greeting floats over whatever the page is showing, so it
+     can't lean on the page ground for contrast. The tight first shadow acts as
+     a stroke separating the letters from what's behind them; the two below it
+     are depth, lifting the text off the page the way a shell hangs above the
+     skyline. */
+  .greeting-text {
+    text-shadow:
+      0 0 1px rgb(15 23 42 / 0.55),
+      0 1px 3px rgb(15 23 42 / 0.45),
+      0 6px 18px rgb(15 23 42 / 0.3);
+  }
+
+  /* Same three layers, pushed darker: on the slate ground the stroke has to do
+     more work, and the glow reads as haze rather than a cast shadow. */
+  .dark .greeting-text {
+    text-shadow:
+      0 0 2px rgb(0 0 0 / 0.75),
+      0 2px 6px rgb(0 0 0 / 0.6),
+      0 0 26px rgb(0 0 0 / 0.45);
   }
 
   /* Solid call-to-action, used for the "back home" links on the ThankYou and

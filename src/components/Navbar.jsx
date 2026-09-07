@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { Menu, X, Moon, Sun } from 'lucide-react'
-import useDarkMode from '../hooks/useDarkMode.js'
+import { Menu, X, Moon, Sun, Monitor } from 'lucide-react'
+import useTheme from '../hooks/useTheme.js'
 import { useLanguage } from '../context/LanguageContext.jsx'
 import { translations } from '../i18n/translations.js'
 import profile from '../data/profile.json'
@@ -15,9 +15,14 @@ const linkClasses = ({ isActive }) => (isActive ? 'select-none text-slate-900 da
 
 const MENU_ID = 'site-menu'
 
+// The icon shows the mode you're in; the label announces the one the next
+// click moves to, following the cycle order in useTheme.
+const THEME_ICONS = { system: Monitor, light: Sun, dark: Moon }
+const NEXT_THEME_LABEL = { system: 'toLight', light: 'toDark', dark: 'toSystem' }
+
 export default function Navbar({ style }) {
   const [isOpen, setIsOpen] = useState(false)
-  const [isDark, setIsDark] = useDarkMode()
+  const { mode: themeMode, cycleMode } = useTheme()
   const { lang, toggleLang } = useLanguage()
   const t = translations[lang]
 
@@ -30,6 +35,8 @@ export default function Navbar({ style }) {
   ]
 
   const toggleMenu = () => setIsOpen((prev) => !prev)
+
+  const ThemeIcon = THEME_ICONS[themeMode]
 
   // Rendered twice — inline on desktop and inside the mobile drawer — so the
   // list is built once and placed in both spots. `padding` differs between the
@@ -67,11 +74,12 @@ export default function Navbar({ style }) {
           </button>
           <button
             type="button"
-            onClick={() => setIsDark((prev) => !prev)}
-            aria-label={isDark ? t.theme.toLight : t.theme.toDark}
+            onClick={cycleMode}
+            aria-label={t.theme[NEXT_THEME_LABEL[themeMode]]}
+            title={t.theme.current[themeMode]}
             className={muted}
           >
-            {isDark ? <Sun size={16} /> : <Moon size={16} />}
+            <ThemeIcon size={16} />
           </button>
           <button
             type="button"

@@ -13,6 +13,12 @@ export const translations = {
     theme: {
       toLight: 'Увімкнути світлу тему',
       toDark: 'Увімкнути темну тему',
+      toSystem: 'Використовувати системну тему',
+      current: {
+        light: 'Тема: світла',
+        dark: 'Тема: темна',
+        system: 'Тема: системна',
+      },
     },
     menu: {
       open: 'Відкрити меню',
@@ -33,6 +39,9 @@ export const translations = {
       statementAltLine2: 'новий поп-арт.',
       daysCounterTemplate:
         'Я живу на цій планеті {days1}, з яких {days2} Російська Федерація здійснює агресію проти мене і моєї країни, з яких {days3} — повномасштабне вторгнення.',
+    },
+    birthday: {
+      greeting: 'З днем народження, Максиме!',
     },
     wishlist: {
       allCategories: 'Усі',
@@ -102,6 +111,12 @@ export const translations = {
     theme: {
       toLight: 'Switch to light mode',
       toDark: 'Switch to dark mode',
+      toSystem: 'Use system setting',
+      current: {
+        light: 'Theme: light',
+        dark: 'Theme: dark',
+        system: 'Theme: system',
+      },
     },
     menu: {
       open: 'Open menu',
@@ -122,6 +137,9 @@ export const translations = {
       statementAltLine2: 'new pop art.',
       daysCounterTemplate:
         'I have lived on this planet for {days1}, of which {days2} the Russian Federation has been committing aggression against me and my country, of which {days3} have been the full-scale invasion.',
+    },
+    birthday: {
+      greeting: 'Happy Birthday, Max!',
     },
     wishlist: {
       allCategories: 'All',
