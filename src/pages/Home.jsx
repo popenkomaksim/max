@@ -1,10 +1,14 @@
-import { Github, Linkedin, Mail } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext.jsx'
 import { translations } from '../i18n/translations.js'
 import profile from '../data/profile.json'
 import AnimatedText from '../components/AnimatedText.jsx'
 import ScrambleText from '../components/ScrambleText.jsx'
 import { daysSince, formatDays } from '../lib/daysCounter.js'
+
+// Order of the entrance cascade in `.stagger` (50ms per child), used to delay
+// the letter-level animations so they start as their own section fades in.
+const STATEMENT_DELAY = 0.25
 
 function renderDaysCounter(template, values) {
   const tokens = ['{days1}', '{days2}', '{days3}']
@@ -37,73 +41,91 @@ export default function Home() {
   const daysOfAggression = formatDays(daysSince(20, 2, 2014), lang)
   const daysOfFullScaleInvasion = formatDays(daysSince(24, 2, 2022), lang)
 
+  const pages = [
+    { to: '/wishlist', label: t.nav.wishlist },
+    { to: '/about', label: t.nav.about },
+    { to: '/beliefs', label: t.nav.beliefs },
+    { to: '/guidelines', label: t.nav.guidelines },
+  ]
+
   return (
-    <div className="flex flex-col gap-14">
-      <section className="flex flex-col items-start gap-5">
-        <span className="rounded-full bg-indigo-50 px-3 py-1 text-sm font-medium text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300">
-          {p.title}
-        </span>
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
-          {t.home.greetingPrefix} {profile.name.split(' ')[0]}.
-        </h1>
-        <p className="max-w-2xl text-lg text-slate-600 dark:text-slate-300">{p.tagline}</p>
-        <p className="max-w-2xl text-slate-600 dark:text-slate-300">{p.bio}</p>
+    <div className="stagger mx-auto max-w-[36.375rem] text-sm font-book leading-5 tracking-tightish text-slate-600 dark:text-slate-300">
+      <header className="flex flex-col gap-1 pb-2">
+        <h1 className="font-medium text-slate-900 dark:text-white">{profile.name}</h1>
+        <p className="text-slate-400 dark:text-slate-500">{p.title}</p>
+      </header>
 
-        <div className="flex flex-wrap items-center gap-3 pt-2">
-          <a
-            href={profile.links.github}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-md border border-slate-300 px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"
-          >
-            <Github size={18} /> {t.home.github}
-          </a>
-          <a
-            href={profile.links.linkedin}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-md border border-slate-300 px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"
-          >
-            <Linkedin size={18} /> {t.home.linkedin}
-          </a>
-          <a
-            href={`mailto:${profile.links.email}`}
-            className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700"
-          >
-            <Mail size={18} /> {t.home.email}
-          </a>
-        </div>
-      </section>
+      <p className="pt-4">{p.tagline}</p>
 
-      <section className="max-w-2xl rounded-lg border border-slate-200 bg-white px-5 py-4 text-slate-600 dark:border-slate-800 dark:bg-slate-800/50 dark:text-slate-300">
-        <p>
-          {renderDaysCounter(t.home.daysCounterTemplate, [
-            { text: daysAlive, startDelay: 0 },
-            { text: daysOfAggression, startDelay: 0.4 },
-            { text: daysOfFullScaleInvasion, startDelay: 0.8 },
-          ])}
-        </p>
-      </section>
+      <p className="pt-4">{p.bio}</p>
 
-      <section>
-        <h2 className="text-4xl font-bold leading-[1.1] tracking-tight sm:text-6xl">
-          <AnimatedText text={statementLine1} className="text-slate-900 dark:text-white" />
+      {/* The days counter closes the prose block: last paragraph of the article
+          is the position that carries the most weight in this layout. */}
+      <p className="pt-4">
+        {renderDaysCounter(t.home.daysCounterTemplate, [
+          { text: daysAlive, startDelay: 0.2 },
+          { text: daysOfAggression, startDelay: 0.5 },
+          { text: daysOfFullScaleInvasion, startDelay: 0.8 },
+        ])}
+      </p>
+
+      <p className="pt-4">
+        {t.home.contactPrefix}{' '}
+        <a className="basic-link" href={`mailto:${profile.links.email}`}>
+          {t.home.contactLink}
+        </a>
+        .
+      </p>
+
+      <section className="pt-12">
+        <p className="font-serif text-2xl italic leading-tight tracking-tight sm:text-3xl">
+          <AnimatedText
+            text={statementLine1}
+            startDelay={STATEMENT_DELAY}
+            className="text-slate-900 dark:text-white"
+          />
           <br />
           <AnimatedText
             text={statementLine2}
-            startDelay={line1LetterCount * 0.035}
+            startDelay={STATEMENT_DELAY + line1LetterCount * 0.035}
             className="text-slate-400 dark:text-slate-500"
           />
-        </h2>
+        </p>
       </section>
 
-      <section>
-        <h2 className="text-xl font-semibold">{t.home.highlightsTitle}</h2>
-        <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+      <section className="pt-12">
+        <h2 className="border-b border-slate-100 pb-2 text-slate-400 dark:border-slate-800 dark:text-slate-500">
+          {t.home.exploreTitle}
+        </h2>
+        <ul className="dim-list flex flex-col">
+          {pages.map((page) => (
+            <li key={page.to} className="dim-row border-b border-slate-100 last:border-none dark:border-slate-800">
+              <Link
+                to={page.to}
+                className="group flex items-center justify-between gap-4 py-3 text-slate-900 dark:text-white"
+              >
+                {page.label}
+                <span
+                  aria-hidden="true"
+                  className="text-slate-400 transition-transform duration-200 ease-out group-hover:translate-x-1 dark:text-slate-500"
+                >
+                  →
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="pt-12">
+        <h2 className="border-b border-slate-100 pb-2 text-slate-400 dark:border-slate-800 dark:text-slate-500">
+          {t.home.highlightsTitle}
+        </h2>
+        <ul className="dim-list flex flex-col">
           {p.highlights.map((highlight) => (
             <li
               key={highlight}
-              className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 dark:border-slate-800 dark:bg-slate-800/50 dark:text-slate-200"
+              className="dim-row border-b border-slate-100 py-3 last:border-none dark:border-slate-800"
             >
               {highlight}
             </li>

@@ -8,10 +8,61 @@ html {
 
 body {
   @apply bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100 transition-colors;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+@layer components {
+  /* Understated inline link: the rule lives in a pseudo-element so it can
+     darken on hover without the text colour shifting. */
+  .basic-link {
+    @apply relative inline text-inherit transition-all duration-200 ease-out;
+  }
+
+  .basic-link::before {
+    content: '';
+    @apply pointer-events-none absolute bottom-0 left-0 right-0 h-px rounded-sm bg-slate-300 transition-[background-color] duration-200 ease-out dark:bg-slate-600;
+  }
+
+  .basic-link:hover::before {
+    @apply bg-slate-500 dark:bg-slate-300;
+  }
+
+  /* Hovering the list dims every row; the hovered row stays at full opacity,
+     so the cursor reads as a spotlight over the group. */
+  .dim-list:hover .dim-row {
+    @apply opacity-40;
+  }
+
+  .dim-list .dim-row:hover {
+    @apply opacity-100;
+  }
+
+  .dim-row {
+    @apply transition-opacity duration-150 ease-out;
+  }
+}
+
+/* Entrance cascade: direct children of a .stagger container fade up in
+   sequence. Delays are applied per child rather than via a JS timeline. */
+.stagger > * {
+  @apply animate-stagger-in;
+}
+
+.stagger > *:nth-child(1) { animation-delay: 0s; }
+.stagger > *:nth-child(2) { animation-delay: 0.05s; }
+.stagger > *:nth-child(3) { animation-delay: 0.1s; }
+.stagger > *:nth-child(4) { animation-delay: 0.15s; }
+.stagger > *:nth-child(5) { animation-delay: 0.2s; }
+.stagger > *:nth-child(6) { animation-delay: 0.25s; }
+.stagger > *:nth-child(7) { animation-delay: 0.3s; }
+.stagger > *:nth-child(8) { animation-delay: 0.35s; }
+.stagger > *:nth-child(n + 9) { animation-delay: 0.4s; }
+
 @media (prefers-reduced-motion: reduce) {
-  .animate-letter-in {
+  .animate-letter-in,
+  .stagger > * {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
