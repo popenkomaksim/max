@@ -7,6 +7,10 @@ import Footer from './Footer.jsx'
 // closing in around the copy rather than snapping in as one block.
 const FOOTER_OFFSET = 0.15
 
+// Delays are summed from per-letter fractions, so round off the float noise
+// before it reaches the DOM (1.5850000000000002s → 1.585s).
+const delayStyle = (seconds) => ({ animationDelay: `${seconds.toFixed(3)}s` })
+
 export default function Layout() {
   // Seconds to hold the chrome back for. Pages with their own entrance
   // animation raise it through `useChromeReveal`; everything else leaves it at
@@ -15,11 +19,11 @@ export default function Layout() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Navbar style={{ animationDelay: `${chromeDelay}s` }} />
+      <Navbar style={delayStyle(chromeDelay)} />
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-6">
         <Outlet context={{ setChromeDelay }} />
       </main>
-      <Footer style={{ animationDelay: `${chromeDelay + FOOTER_OFFSET}s` }} />
+      <Footer style={delayStyle(chromeDelay + FOOTER_OFFSET)} />
     </div>
   )
 }
