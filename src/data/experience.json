@@ -6,14 +6,31 @@
     "uk": {
       "role": "Тімлід розробки",
       "org": "DataArt",
-      "period": "2023 — дотепер",
+      "period": "2020 — дотепер",
       "summary": "Керую розробкою клієнтської панелі, наставляю двох інженерів і впроваджую спільну бібліотеку компонентів."
     },
     "en": {
       "role": "Team Lead, Development",
       "org": "DataArt",
-      "period": "2023 — Present",
+      "period": "2020 — Present",
       "summary": "Leading development of the customer-facing dashboard, mentoring two engineers, and driving adoption of a shared component library."
+    }
+  },
+  {
+    "id": "software-developer",
+    "type": "work",
+    "year": 2014,
+    "uk": {
+      "role": "Розробник програмного забезпечення",
+      "org": "DataArt",
+      "period": "2014 — 2020",
+      "summary": "Розробляв вебзастосунки для клієнтів компанії, від інтерфейсів до сервісів на бекенді."
+    },
+    "en": {
+      "role": "Software Developer",
+      "org": "DataArt",
+      "period": "2014 — 2020",
+      "summary": "Built web applications for the company's clients, from user interfaces to back-end services."
     }
   },
   {
