@@ -6,33 +6,22 @@ import mountains from '../data/mountains.json'
 
 const events = [...experience, ...mountains].sort((a, b) => b.year - a.year)
 
-const iconByType = {
-  work: Briefcase,
-  education: GraduationCap,
-  mountain: Mountain,
+const styleByType = {
+  work: { Icon: Briefcase, dot: 'bg-indigo-600', period: 'text-indigo-600 dark:text-indigo-400' },
+  education: { Icon: GraduationCap, dot: 'bg-indigo-600', period: 'text-indigo-600 dark:text-indigo-400' },
+  mountain: { Icon: Mountain, dot: 'bg-emerald-600', period: 'text-emerald-600 dark:text-emerald-400' },
 }
 
-const dotClassByType = {
-  work: 'bg-indigo-600',
-  education: 'bg-indigo-600',
-  mountain: 'bg-emerald-600',
-}
-
-const periodClassByType = {
-  work: 'text-indigo-600 dark:text-indigo-400',
-  education: 'text-indigo-600 dark:text-indigo-400',
-  mountain: 'text-emerald-600 dark:text-emerald-400',
-}
-
-function EventCard({ entry, lang, align }) {
+function EventCard({ entry, lang }) {
   const e = entry[lang]
   const isMountain = entry.type === 'mountain'
-  const isEnd = align === 'end'
 
   return (
-    <div className={`flex flex-col ${isEnd ? 'items-end text-right' : 'items-start text-left'}`}>
-      <p className={`text-xs font-medium uppercase tracking-wide ${periodClassByType[entry.type]}`}>{e.period}</p>
-      <h2 className={`mt-1 flex items-center gap-2 text-lg font-semibold ${isEnd ? 'flex-row-reverse' : ''}`}>
+    <div
+      className={`col-span-1 flex flex-col ${isMountain ? 'col-start-2 items-start text-left' : 'col-start-1 items-end text-right'}`}
+    >
+      <p className={`text-xs font-medium uppercase tracking-wide ${styleByType[entry.type].period}`}>{e.period}</p>
+      <h2 className={`mt-1 flex items-center gap-2 text-lg font-semibold ${isMountain ? '' : 'flex-row-reverse'}`}>
         {isMountain ? e.name : e.role}
         {e.location && (
           <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
@@ -71,18 +60,12 @@ export default function About() {
       <ol className="relative flex flex-col gap-10">
         <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-slate-200 dark:bg-slate-800" />
         {events.map((entry) => {
-          const Icon = iconByType[entry.type]
-          const isMountain = entry.type === 'mountain'
+          const { Icon, dot } = styleByType[entry.type]
           return (
             <li key={entry.id} className="relative grid grid-cols-2 gap-x-8 sm:gap-x-12">
-              <div className={isMountain ? 'invisible' : ''}>
-                {!isMountain && <EventCard entry={entry} lang={lang} align="end" />}
-              </div>
-              <div className={isMountain ? '' : 'invisible'}>
-                {isMountain && <EventCard entry={entry} lang={lang} align="start" />}
-              </div>
+              <EventCard entry={entry} lang={lang} />
               <span
-                className={`absolute left-1/2 top-0 flex h-7 w-7 -translate-x-1/2 items-center justify-center rounded-full text-white ring-4 ring-white dark:ring-slate-900 ${dotClassByType[entry.type]}`}
+                className={`absolute left-1/2 top-0 flex h-7 w-7 -translate-x-1/2 items-center justify-center rounded-full text-white ring-4 ring-white dark:ring-slate-900 ${dot}`}
               >
                 <Icon size={13} />
               </span>
