@@ -1,4 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
-  <rect width="24" height="24" rx="6" fill="#4f46e5"/>
-  <text x="12" y="17" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="white" text-anchor="middle">A</text>
+  <style>
+    .glyph { fill: #0f172a }
+    /* The tab strip inverts in dark mode; so does the mark. */
+    @media (prefers-color-scheme: dark) { .glyph { fill: #f8fafc } }
+  </style>
+  <!-- Outlined rather than set as <text>: a favicon gets no webfont, so
+       `font-family` would draw a different letterform on every OS. The forward
+       slant answers the Newsreader italic on the home page. -->
+  <path class="glyph" d="M1.74 19 L4.26 5 L7.46 5 L11.73 13.5 L19.06 5 L22.26 5 L19.74 19 L16.64 19 L18.22 10.2 L11.56 17.8 L10.36 17.8 L6.42 10.2 L4.84 19 Z"/>
 </svg>
