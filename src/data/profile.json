@@ -7,23 +7,47 @@
     "email": "maskim@protonmail.com"
   },
   "uk": {
-    "title": "Тімлід розробки",
-    "tagline": "Я створюю надійний софт, орієнтований на користувача, і люблю навчатися відкрито.",
-    "bio": "Я розробник програмного забезпечення, якому подобається перетворювати неоднозначні задачі на чисті, підтримувані продукти. У вільний час роблю внесок у відкритий код та займаюся власними проєктами.",
+    "title": "Архітектор ПЗ · Розвідка, ІТ та зв’язок",
+    "tagline": "Проєктую системи, які витримують, коли підводить мережа, дедлайн або обстановка.",
+    "bio": "Я архітектор програмного забезпечення, який працює на стику інформаційних систем, розвідки та зв’язку. Беру неоднозначні задачі з високою ціною помилки й перетворюю їх на архітектури, якими можна керувати під тиском — стійкі, прозорі й достатньо прості, щоб пояснити їх на дошці. У вільний час роблю внесок у відкритий код і ходжу в гори.",
     "highlights": [
-      "10+ років досвіду розробки веб-застосунків від початку до кінця",
-      "Впевнено працюю з React, Node.js та хмарною інфраструктурою",
+      "10+ років проєктування та впровадження розподілених систем від початку до кінця",
+      "Архітектура на всіх рівнях: React, Node.js, хмарна та локальна інфраструктура",
+      "Розвідувальні системи: дані з сенсорів і БпЛА, геопросторові дані, засоби ситуаційної обізнаності",
+      "Зв’язок, що працює в деградованих, придушених і нестабільних мережах",
       "Учасник відкритих проєктів і прихильник постійного навчання"
-    ]
+    ],
+    "alt": {
+      "title": "Тімлід розробки",
+      "tagline": "Я створюю надійний софт, орієнтований на користувача, і люблю навчатися відкрито.",
+      "bio": "Я розробник програмного забезпечення, якому подобається перетворювати неоднозначні задачі на чисті, підтримувані продукти. У вільний час роблю внесок у відкритий код та займаюся власними проєктами.",
+      "highlights": [
+        "10+ років досвіду розробки веб-застосунків від початку до кінця",
+        "Впевнено працюю з React, Node.js та хмарною інфраструктурою",
+        "Учасник відкритих проєктів і прихильник постійного навчання"
+      ]
+    }
   },
   "en": {
-    "title": "Team Lead, Development",
-    "tagline": "I build reliable, user-focused software and enjoy learning in public.",
-    "bio": "I'm a software engineer who loves turning ambiguous problems into clean, maintainable products. Outside of work I contribute to open source and tinker with side projects.",
+    "title": "Software Architect · Recon, IT & Comms",
+    "tagline": "I design systems that hold up when the network, the deadline, or the situation turns hostile.",
+    "bio": "I'm a software architect working where information systems meet reconnaissance and communications. I take ambiguous, high-stakes problems and turn them into architectures people can operate under pressure — resilient, observable, and simple enough to explain on a whiteboard. Outside of work I contribute to open source and climb mountains.",
     "highlights": [
-      "10+ years building web applications end to end",
-      "Comfortable across the stack: React, Node.js, and cloud infrastructure",
+      "10+ years designing and shipping distributed systems end to end",
+      "Architecture across the stack: React, Node.js, cloud and on-prem infrastructure",
+      "Reconnaissance systems: sensor and drone feeds, geospatial data, situational-awareness tooling",
+      "Communications that survive degraded, contested, and intermittent networks",
       "Open-source contributor and lifelong learner"
-    ]
+    ],
+    "alt": {
+      "title": "Team Lead, Development",
+      "tagline": "I build reliable, user-focused software and enjoy learning in public.",
+      "bio": "I'm a software engineer who loves turning ambiguous problems into clean, maintainable products. Outside of work I contribute to open source and tinker with side projects.",
+      "highlights": [
+        "10+ years building web applications end to end",
+        "Comfortable across the stack: React, Node.js, and cloud infrastructure",
+        "Open-source contributor and lifelong learner"
+      ]
+    }
   }
 }

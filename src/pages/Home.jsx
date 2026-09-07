@@ -1,3 +1,4 @@
+import { useSearchParams } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext.jsx'
 import { translations } from '../i18n/translations.js'
 import profile from '../data/profile.json'
@@ -39,10 +40,20 @@ function renderDaysCounter(template, counters) {
 
 export default function Home() {
   const { lang } = useLanguage()
+  const [searchParams] = useSearchParams()
   const t = translations[lang]
-  const p = profile[lang]
-  const line1LetterCount = t.home.statementLine1.replace(/\s/g, '').length
-  const line2LetterCount = t.home.statementLine2.replace(/\s/g, '').length
+
+  // `?as=webdesigner` restores the site's original copy — bio block and closing
+  // statement — for people arriving from links shared back when this read as a
+  // designer's page. Both personas are localised, so the alternates are picked
+  // from inside the already language-scoped data.
+  const asWebDesigner = searchParams.get('as')?.toLowerCase() === 'webdesigner'
+  const p = asWebDesigner ? profile[lang].alt : profile[lang]
+  const statementLine1 = asWebDesigner ? t.home.statementAltLine1 : t.home.statementLine1
+  const statementLine2 = asWebDesigner ? t.home.statementAltLine2 : t.home.statementLine2
+
+  const line1LetterCount = statementLine1.replace(/\s/g, '').length
+  const line2LetterCount = statementLine2.replace(/\s/g, '').length
 
   // The statement is the last thing on the page to finish animating, so the
   // navbar and footer wait for it: copy first, then the frame around it.
@@ -88,14 +99,14 @@ export default function Home() {
       <section className="pt-12">
         <p className="font-serif text-[clamp(1.5rem,1.15rem+1.75vw,1.875rem)] italic leading-tight tracking-tight">
           <AnimatedText
-            text={t.home.statementLine1}
+            text={statementLine1}
             startDelay={STATEMENT_DELAY}
             step={LETTER_STEP}
             className="text-slate-900 dark:text-white"
           />
           <br />
           <AnimatedText
-            text={t.home.statementLine2}
+            text={statementLine2}
             startDelay={STATEMENT_DELAY + line1LetterCount * LETTER_STEP}
             step={LETTER_STEP}
             className="text-slate-400 dark:text-slate-500"
