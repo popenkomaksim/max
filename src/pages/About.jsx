@@ -4,41 +4,26 @@ import { translations } from '../i18n/translations.js'
 import experience from '../data/experience.json'
 import mountains from '../data/mountains.json'
 
-// One merged, newest-first timeline; the two sources are only distinguished by
-// `type`, which decides the column, icon and accent colour.
+// One merged, newest-first ordering; `type` picks both the marker icon and the
+// swim lane the entry lands in.
 const events = [...experience, ...mountains].sort((a, b) => b.year - a.year)
 
-const careerAccent = { dot: 'bg-indigo-600', period: 'text-indigo-600 dark:text-indigo-400' }
-const mountainAccent = { dot: 'bg-emerald-600', period: 'text-emerald-600 dark:text-emerald-400' }
-
-const styleByType = {
-  work: { Icon: Briefcase, ...careerAccent },
-  education: { Icon: GraduationCap, ...careerAccent },
-  mountain: { Icon: Mountain, ...mountainAccent },
+// Studying and working share the left lane — they're the same thread of a
+// career — so the icon is still what tells a job from a degree.
+const iconByType = {
+  work: Briefcase,
+  education: GraduationCap,
+  mountain: Mountain,
 }
 
-// Career entries hang off the left of the centre line (right-aligned, reading
-// inwards); summits hang off the right.
-function EventCard({ entry, lang, period }) {
-  const e = entry[lang]
-  const isMountain = entry.type === 'mountain'
-
+// Sits in the lane's gutter, opaque so the spine passes behind it rather than
+// through it. Shared by the lane headings and the entries, which is what keeps
+// both pinned to the same rail.
+function LaneMarker({ Icon }) {
   return (
-    <div
-      className={`col-span-1 flex flex-col ${isMountain ? 'col-start-2 items-start text-left' : 'col-start-1 items-end text-right'}`}
-    >
-      <p className={`text-xs font-medium uppercase tracking-wide ${period}`}>{e.period}</p>
-      <h2 className={`mt-1 flex items-center gap-2 text-lg font-semibold ${isMountain ? '' : 'flex-row-reverse'}`}>
-        {isMountain ? e.name : e.role}
-        {e.location && (
-          <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
-            {e.location}
-          </span>
-        )}
-      </h2>
-      {!isMountain && <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{e.org}</p>}
-      <p className="mt-2 text-slate-600 dark:text-slate-300">{e.summary}</p>
-    </div>
+    <span className="absolute left-0 top-0 flex h-5 w-4 items-center justify-center bg-white dark:bg-slate-900">
+      <Icon size={13} />
+    </span>
   )
 }
 
@@ -47,41 +32,64 @@ export default function About() {
   const t = translations[lang]
 
   return (
-    <div className="flex flex-col gap-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">{t.about.title}</h1>
-        <p className="mt-2 text-slate-600 dark:text-slate-300">{t.about.subtitle}</p>
-      </div>
+    <div className="stagger mx-auto max-w-[36.375rem] text-sm font-book leading-5 tracking-tightish text-slate-600 dark:text-slate-300">
+      <header className="flex flex-col gap-1 pb-2">
+        <h1 className="font-medium text-slate-900 dark:text-white">{t.about.title}</h1>
+        <p className="text-slate-400 dark:text-slate-500">{t.about.subtitle}</p>
+      </header>
 
-      {/* Legend for the two columns below. */}
-      <div className="flex items-center justify-center gap-8 text-sm font-medium text-slate-500 dark:text-slate-400">
-        <span className="flex items-center gap-1.5">
-          <Briefcase size={14} className="text-indigo-600 dark:text-indigo-400" />
+      {/* Heads the lane it names on `sm` and up. Below that the lanes merge
+          into one column, so the pair falls back to reading as a legend for
+          the markers. */}
+      <div className="grid grid-cols-1 pt-4 text-slate-400 dark:text-slate-500 sm:grid-cols-2">
+        <span className="relative flex h-5 items-center pl-8">
+          <LaneMarker Icon={Briefcase} />
           {t.about.workTitle}
         </span>
-        <span className="flex items-center gap-1.5">
-          <Mountain size={14} className="text-emerald-600 dark:text-emerald-400" />
+        <span className="relative flex h-5 items-center pl-8">
+          <LaneMarker Icon={Mountain} />
           {t.about.mountainsTitle}
         </span>
       </div>
 
-      <ol className="relative flex flex-col gap-10">
-        {/* The vertical spine the entries and their dots are pinned to. */}
-        <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-slate-200 dark:bg-slate-800" />
-        {events.map((entry) => {
-          const { Icon, dot, period } = styleByType[entry.type]
-          return (
-            <li key={entry.id} className="relative grid grid-cols-2 gap-x-8 sm:gap-x-12">
-              <EventCard entry={entry} lang={lang} period={period} />
-              <span
-                className={`absolute left-1/2 top-0 flex h-7 w-7 -translate-x-1/2 items-center justify-center rounded-full text-white ring-4 ring-white dark:ring-slate-900 ${dot}`}
+      {/* The padding sits outside the list so the spines can measure off the
+          first entry rather than off the gap above it. */}
+      <div className="pt-8">
+        <ol className="relative grid grid-cols-1 gap-y-8 sm:grid-cols-2">
+          {/* One spine per lane. The columns are an even 50/50 split with no
+              x-gap — entries space themselves with their own padding instead —
+              which is what lets the second rail sit at a plain 50%. */}
+          <div className="absolute inset-y-2 left-2 w-px -translate-x-1/2 bg-slate-100 dark:bg-slate-800" />
+          <div className="absolute inset-y-2 left-[calc(50%+0.5rem)] hidden w-px -translate-x-1/2 bg-slate-100 sm:block dark:bg-slate-800" />
+
+          {events.map((entry, index) => {
+            const e = entry[lang]
+            const isMountain = entry.type === 'mountain'
+
+            return (
+              // A row of its own per entry, so the newest-first order still
+              // reads straight down the page. Left to itself, grid packing
+              // would pair an entry with whatever sits opposite it and imply
+              // the two happened at the same time.
+              <li
+                key={entry.id}
+                style={{ gridRow: index + 1 }}
+                className={`relative pl-8 ${isMountain ? 'sm:col-start-2' : 'sm:col-start-1 sm:pr-6'}`}
               >
-                <Icon size={13} />
-              </span>
-            </li>
-          )
-        })}
-      </ol>
+                <span className="text-slate-300 dark:text-slate-600">
+                  <LaneMarker Icon={iconByType[entry.type]} />
+                </span>
+                <p className="text-slate-400 dark:text-slate-500">{e.period}</p>
+                <h2 className="font-medium text-slate-900 dark:text-white">
+                  {isMountain ? e.name : e.role}
+                </h2>
+                <p className="text-slate-400 dark:text-slate-500">{isMountain ? e.location : e.org}</p>
+                <p className="pt-2">{e.summary}</p>
+              </li>
+            )
+          })}
+        </ol>
+      </div>
     </div>
   )
 }
