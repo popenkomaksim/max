@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { readString, writeString } from '../lib/storage.js'
 
 const LanguageContext = createContext(null)
 const STORAGE_KEY = 'lang'
@@ -7,12 +8,8 @@ const SUPPORTED = ['uk', 'en']
 const DEFAULT_LANG = 'uk'
 
 function readStoredLang() {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    return SUPPORTED.includes(stored) ? stored : null
-  } catch {
-    return null
-  }
+  const stored = readString(STORAGE_KEY)
+  return SUPPORTED.includes(stored) ? stored : null
 }
 
 export function LanguageProvider({ children }) {
@@ -28,11 +25,7 @@ export function LanguageProvider({ children }) {
 
   useEffect(() => {
     document.documentElement.lang = lang
-    try {
-      localStorage.setItem(STORAGE_KEY, lang)
-    } catch {
-      // localStorage may be unavailable (e.g. private browsing); ignore.
-    }
+    writeString(STORAGE_KEY, lang)
   }, [lang])
 
   // Re-append ?lang after any navigation that dropped it, so the active

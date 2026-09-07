@@ -12,7 +12,7 @@ export default function NotFound() {
       <p className="text-slate-600 dark:text-slate-300">{t.notFound.message}</p>
       <Link
         to="/"
-        className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700"
+        className="btn-primary"
       >
         {t.notFound.backHome}
       </Link>

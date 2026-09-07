@@ -11,10 +11,9 @@ import profile from '../data/profile.json'
 const muted =
   'text-slate-400 transition-colors duration-200 hover:text-slate-900 dark:text-slate-500 dark:hover:text-white'
 
-const linkClasses = ({ isActive }) =>
-  isActive ? 'text-slate-900 dark:text-white' : muted
+const linkClasses = ({ isActive }) => (isActive ? 'text-slate-900 dark:text-white' : muted)
 
-export default function Navbar() {
+export default function Navbar({ style }) {
   const [isOpen, setIsOpen] = useState(false)
   const [isDark, setIsDark] = useDarkMode()
   const { lang, toggleLang } = useLanguage()
@@ -28,26 +27,19 @@ export default function Navbar() {
     { to: '/guidelines', label: t.nav.guidelines },
   ]
 
-  const navLinks = links.map((link) => (
-    <NavLink
-      key={link.to}
-      to={link.to}
-      end={link.to === '/'}
-      className={linkClasses}
-      onClick={() => setIsOpen(false)}
-    >
-      {link.label}
+  // Rendered twice — inline on desktop and inside the mobile drawer — so the
+  // list is built once and placed in both spots.
+  const navLinks = links.map(({ to, label }) => (
+    // `end` keeps "/" from matching every route as active.
+    <NavLink key={to} to={to} end={to === '/'} className={linkClasses} onClick={() => setIsOpen(false)}>
+      {label}
     </NavLink>
   ))
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-100 bg-white/85 backdrop-blur dark:border-slate-800 dark:bg-slate-900/85">
+    <header style={style} className="chrome-in sticky top-0 z-50 border-b border-slate-100 bg-white/85 backdrop-blur dark:border-slate-800 dark:bg-slate-900/85">
       <nav className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4 text-sm font-book tracking-tightish sm:px-6">
-        <NavLink
-          to="/"
-          className="font-medium text-slate-900 dark:text-white"
-          onClick={() => setIsOpen(false)}
-        >
+        <NavLink to="/" className="font-medium text-slate-900 dark:text-white" onClick={() => setIsOpen(false)}>
           {profile.name}
         </NavLink>
 

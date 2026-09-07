@@ -29,18 +29,10 @@ body {
     @apply bg-slate-500 dark:bg-slate-300;
   }
 
-  /* Hovering the list dims every row; the hovered row stays at full opacity,
-     so the cursor reads as a spotlight over the group. */
-  .dim-list:hover .dim-row {
-    @apply opacity-40;
-  }
-
-  .dim-list .dim-row:hover {
-    @apply opacity-100;
-  }
-
-  .dim-row {
-    @apply transition-opacity duration-150 ease-out;
+  /* Solid call-to-action, used for the "back home" links on the ThankYou and
+     NotFound pages. */
+  .btn-primary {
+    @apply rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700;
   }
 }
 
@@ -60,8 +52,16 @@ body {
 .stagger > *:nth-child(8) { animation-delay: 0.35s; }
 .stagger > *:nth-child(n + 9) { animation-delay: 0.4s; }
 
+/* Site chrome uses the same entrance as the cascade, but its delay is set
+   inline by Layout so a page can hold it back until its own copy has finished
+   animating (see useChromeReveal). */
+.chrome-in {
+  @apply animate-stagger-in;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-letter-in,
+  .chrome-in,
   .stagger > * {
     animation: none !important;
     opacity: 1 !important;

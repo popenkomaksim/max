@@ -1,30 +1,30 @@
+// Reveals `text` one letter at a time via the `animate-letter-in` keyframes,
+// staggered by `step` seconds. Letters are counted across the whole string, so
+// the sweep stays continuous from word to word.
 export default function AnimatedText({ text, startDelay = 0, step = 0.035, className = '' }) {
-  const words = text.split(' ')
   let letterIndex = 0
-  const nodes = []
 
-  words.forEach((word, wi) => {
-    nodes.push(
-      <span key={`w${wi}`} className="inline-block whitespace-nowrap">
-        {word.split('').map((ch, ci) => {
-          const delay = startDelay + letterIndex * step
-          letterIndex += 1
-          return (
-            <span
-              key={ci}
-              className={`inline-block animate-letter-in ${className}`}
-              style={{ animationDelay: `${delay}s` }}
-            >
-              {ch}
-            </span>
-          )
-        })}
+  return text.split(' ').flatMap((word, wordIndex) => {
+    const wordStart = letterIndex
+    letterIndex += word.length
+
+    const rendered = (
+      // Each word is a nowrap inline-block so a line break never lands between
+      // two letters of the same word.
+      <span key={wordIndex} className="inline-block whitespace-nowrap">
+        {word.split('').map((char, charIndex) => (
+          <span
+            key={charIndex}
+            className={`inline-block animate-letter-in ${className}`}
+            style={{ animationDelay: `${startDelay + (wordStart + charIndex) * step}s` }}
+          >
+            {char}
+          </span>
+        ))}
       </span>
     )
-    if (wi < words.length - 1) {
-      nodes.push(' ')
-    }
-  })
 
-  return nodes
+    // Put back the space `split` consumed, so words don't run together.
+    return wordIndex === 0 ? [rendered] : [' ', rendered]
+  })
 }

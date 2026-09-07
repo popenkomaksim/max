@@ -14,16 +14,14 @@ export default function LiquidButton({
   className = '',
 }) {
   const svgRef = useRef(null)
-  const engineRef = useRef(null)
 
+  // The engine reads its config from the SVG's data-attributes on construction
+  // and renders the label itself, so a text change (e.g. switching language)
+  // has to tear the instance down and build a new one.
   useEffect(() => {
-    engineRef.current = new LiquidButtonEngine(svgRef.current, { text })
-    return () => engineRef.current?.destroy()
+    const engine = new LiquidButtonEngine(svgRef.current, { text })
+    return () => engine.destroy()
   }, [text])
-
-  function handleActivate() {
-    onClick?.()
-  }
 
   return (
     <svg
@@ -31,11 +29,12 @@ export default function LiquidButton({
       role="button"
       tabIndex={0}
       aria-label={text}
-      onClick={handleActivate}
+      onClick={() => onClick?.()}
       onKeyDown={(e) => {
+        // An <svg role="button"> isn't natively keyboard-activatable.
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault()
-          handleActivate()
+          onClick?.()
         }
       }}
       className={`liquid-button cursor-pointer font-sans text-sm font-bold uppercase tracking-wide outline-none ${className}`}

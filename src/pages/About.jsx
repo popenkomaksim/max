@@ -4,15 +4,22 @@ import { translations } from '../i18n/translations.js'
 import experience from '../data/experience.json'
 import mountains from '../data/mountains.json'
 
+// One merged, newest-first timeline; the two sources are only distinguished by
+// `type`, which decides the column, icon and accent colour.
 const events = [...experience, ...mountains].sort((a, b) => b.year - a.year)
 
+const careerAccent = { dot: 'bg-indigo-600', period: 'text-indigo-600 dark:text-indigo-400' }
+const mountainAccent = { dot: 'bg-emerald-600', period: 'text-emerald-600 dark:text-emerald-400' }
+
 const styleByType = {
-  work: { Icon: Briefcase, dot: 'bg-indigo-600', period: 'text-indigo-600 dark:text-indigo-400' },
-  education: { Icon: GraduationCap, dot: 'bg-indigo-600', period: 'text-indigo-600 dark:text-indigo-400' },
-  mountain: { Icon: Mountain, dot: 'bg-emerald-600', period: 'text-emerald-600 dark:text-emerald-400' },
+  work: { Icon: Briefcase, ...careerAccent },
+  education: { Icon: GraduationCap, ...careerAccent },
+  mountain: { Icon: Mountain, ...mountainAccent },
 }
 
-function EventCard({ entry, lang }) {
+// Career entries hang off the left of the centre line (right-aligned, reading
+// inwards); summits hang off the right.
+function EventCard({ entry, lang, period }) {
   const e = entry[lang]
   const isMountain = entry.type === 'mountain'
 
@@ -20,7 +27,7 @@ function EventCard({ entry, lang }) {
     <div
       className={`col-span-1 flex flex-col ${isMountain ? 'col-start-2 items-start text-left' : 'col-start-1 items-end text-right'}`}
     >
-      <p className={`text-xs font-medium uppercase tracking-wide ${styleByType[entry.type].period}`}>{e.period}</p>
+      <p className={`text-xs font-medium uppercase tracking-wide ${period}`}>{e.period}</p>
       <h2 className={`mt-1 flex items-center gap-2 text-lg font-semibold ${isMountain ? '' : 'flex-row-reverse'}`}>
         {isMountain ? e.name : e.role}
         {e.location && (
@@ -46,6 +53,7 @@ export default function About() {
         <p className="mt-2 text-slate-600 dark:text-slate-300">{t.about.subtitle}</p>
       </div>
 
+      {/* Legend for the two columns below. */}
       <div className="flex items-center justify-center gap-8 text-sm font-medium text-slate-500 dark:text-slate-400">
         <span className="flex items-center gap-1.5">
           <Briefcase size={14} className="text-indigo-600 dark:text-indigo-400" />
@@ -58,12 +66,13 @@ export default function About() {
       </div>
 
       <ol className="relative flex flex-col gap-10">
+        {/* The vertical spine the entries and their dots are pinned to. */}
         <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-slate-200 dark:bg-slate-800" />
         {events.map((entry) => {
-          const { Icon, dot } = styleByType[entry.type]
+          const { Icon, dot, period } = styleByType[entry.type]
           return (
             <li key={entry.id} className="relative grid grid-cols-2 gap-x-8 sm:gap-x-12">
-              <EventCard entry={entry} lang={lang} />
+              <EventCard entry={entry} lang={lang} period={period} />
               <span
                 className={`absolute left-1/2 top-0 flex h-7 w-7 -translate-x-1/2 items-center justify-center rounded-full text-white ring-4 ring-white dark:ring-slate-900 ${dot}`}
               >

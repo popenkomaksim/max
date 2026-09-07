@@ -5,8 +5,11 @@ import { translations } from '../i18n/translations.js'
 import wishlistData from '../data/wishlist.json'
 import LiquidButton from '../components/LiquidButton.jsx'
 import useUsdToUahRate from '../hooks/useUsdToUahRate.js'
+import { readJson, readString, writeJson, writeString } from '../lib/storage.js'
 
 const MONOBANK_JAR_URL = 'https://send.monobank.ua/jar/78kTAqpQPm'
+// The donation banner is birthday-scoped: it hides itself after this date
+// rather than needing a deploy to take it down.
 const SUPPORT_BANNER_DEADLINE = new Date('2026-09-23T00:00:00')
 
 const STORAGE_KEY = 'wishlist-acquired'
@@ -19,22 +22,13 @@ const priorityClasses = {
   low: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300',
 }
 
+// Ticking an item off is a local-only override on top of the JSON data, so the
+// checkbox state survives a reload without needing a backend.
 function loadAcquiredOverrides() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) ?? {}
-  } catch {
-    return {}
-  }
+  return readJson(STORAGE_KEY, {})
 }
 
-function loadCurrency() {
-  try {
-    return localStorage.getItem(CURRENCY_KEY) === 'USD' ? 'USD' : 'UAH'
-  } catch {
-    return 'UAH'
-  }
-}
-
+// Prices in wishlist.json are all USD; UAH is derived from the live NBU rate.
 function formatPrice(priceUsd, currency, rate) {
   if (typeof priceUsd !== 'number') return '—'
   if (currency === 'USD') return `$${priceUsd.toLocaleString()}`
@@ -48,18 +42,21 @@ export default function Wishlist() {
   const [acquiredOverrides, setAcquiredOverrides] = useState(loadAcquiredOverrides)
   const [categoryFilter, setCategoryFilter] = useState('all')
   const [hideAcquired, setHideAcquired] = useState(false)
-  const [currency, setCurrency] = useState(loadCurrency)
+  const [currency, setCurrency] = useState(() => (readString(CURRENCY_KEY) === 'USD' ? 'USD' : 'UAH'))
   const { rate, error: rateError } = useUsdToUahRate()
+  // Keep the UAH button selected (and the "rate unavailable" note visible) but
+  // show USD figures when the rate lookup failed — ₴ prices would be a guess.
   const effectiveCurrency = currency === 'UAH' && rateError ? 'USD' : currency
 
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(acquiredOverrides))
+    writeJson(STORAGE_KEY, acquiredOverrides)
   }, [acquiredOverrides])
 
   useEffect(() => {
-    localStorage.setItem(CURRENCY_KEY, currency)
+    writeString(CURRENCY_KEY, currency)
   }, [currency])
 
+  // High-priority items first; the JSON keeps its own authoring order.
   const items = useMemo(
     () =>
       wishlistData
@@ -79,6 +76,7 @@ export default function Wishlist() {
     return true
   })
 
+  // Headline figure: what's still outstanding, so ticked-off items drop out.
   const totalValue = items
     .filter((item) => !item.acquired && typeof item.price === 'number')
     .reduce((sum, item) => sum + item.price, 0)

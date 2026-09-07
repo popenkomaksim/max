@@ -19,7 +19,7 @@ export default function ThankYou() {
       </div>
       <Link
         to="/"
-        className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700"
+        className="btn-primary"
       >
         {t.thankYou.backHome}
       </Link>
