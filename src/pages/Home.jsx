@@ -8,7 +8,7 @@ import { daysSince, formatDays } from '../lib/daysCounter.js'
 
 // Order of the entrance cascade in `.stagger` (50ms per child), used to delay
 // the letter-level animations so they start as their own section fades in.
-const STATEMENT_DELAY = 0.25
+const STATEMENT_DELAY = 0.3
 
 function renderDaysCounter(template, values) {
   const tokens = ['{days1}', '{days2}', '{days3}']
@@ -59,6 +59,12 @@ export default function Home() {
 
       <p className="pt-4">{p.bio}</p>
 
+      <ul className="list-disc pt-4 pl-4 marker:text-slate-300 dark:marker:text-slate-600">
+        {p.highlights.map((highlight) => (
+          <li key={highlight}>{highlight}</li>
+        ))}
+      </ul>
+
       {/* The days counter closes the prose block: last paragraph of the article
           is the position that carries the most weight in this layout. */}
       <p className="pt-4">
@@ -91,46 +97,6 @@ export default function Home() {
             className="text-slate-400 dark:text-slate-500"
           />
         </p>
-      </section>
-
-      <section className="pt-12">
-        <h2 className="border-b border-slate-100 pb-2 text-slate-400 dark:border-slate-800 dark:text-slate-500">
-          {t.home.exploreTitle}
-        </h2>
-        <ul className="dim-list flex flex-col">
-          {pages.map((page) => (
-            <li key={page.to} className="dim-row border-b border-slate-100 last:border-none dark:border-slate-800">
-              <Link
-                to={page.to}
-                className="group flex items-center justify-between gap-4 py-3 text-slate-900 dark:text-white"
-              >
-                {page.label}
-                <span
-                  aria-hidden="true"
-                  className="text-slate-400 transition-transform duration-200 ease-out group-hover:translate-x-1 dark:text-slate-500"
-                >
-                  →
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section className="pt-12">
-        <h2 className="border-b border-slate-100 pb-2 text-slate-400 dark:border-slate-800 dark:text-slate-500">
-          {t.home.highlightsTitle}
-        </h2>
-        <ul className="dim-list flex flex-col">
-          {p.highlights.map((highlight) => (
-            <li
-              key={highlight}
-              className="dim-row border-b border-slate-100 py-3 last:border-none dark:border-slate-800"
-            >
-              {highlight}
-            </li>
-          ))}
-        </ul>
       </section>
     </div>
   )

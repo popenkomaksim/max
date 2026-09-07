@@ -27,7 +27,6 @@ export const translations = {
       contactPrefix: 'Напишіть мені —',
       contactLink: 'поштою',
       exploreTitle: 'Сторінки',
-      highlightsTitle: 'Коротко про мене',
       statementLine1: 'Веб-дизайн це',
       statementLine2: 'новий поп-арт.',
       daysCounterTemplate:
@@ -119,7 +118,6 @@ export const translations = {
       contactPrefix: 'Reach me via',
       contactLink: 'email',
       exploreTitle: 'Pages',
-      highlightsTitle: 'Quick Highlights',
       statementLine1: 'Web Design is',
       statementLine2: 'new pop art.',
       daysCounterTemplate:
