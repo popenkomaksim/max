@@ -5,7 +5,7 @@
     "priorityKey": "low",
     "price": 65,
     "url": "https://www.wacaco.com/products/nanopresso?variant=41572735647817",
-    "acquired": false,
+    "acquired": true,
     "uk": { "name": "Nanopresso", "notes": "Портативна еспресо-машина, до 18 бар тиску." },
     "en": { "name": "Nanopresso", "notes": "Portable espresso maker, up to 18 bar pressure." }
   },
@@ -25,7 +25,7 @@
     "priorityKey": "medium",
     "price": 399,
     "url": "",
-    "acquired": false,
+    "acquired": true,
     "uk": { "name": "Дропер-пост ф30,9 мм", "notes": "Регульований підсідельний штир для MTB, діаметр 30,9 мм." },
     "en": { "name": "Dropper Post ø30.9 mm", "notes": "Adjustable MTB seatpost, 30.9 mm diameter." }
   },
