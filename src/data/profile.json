@@ -12,7 +12,7 @@
     "bio": "Я архітектор програмного забезпечення, який працює на стику інформаційних систем та зв’язку. Беру неоднозначні задачі з високою ціною помилки й перетворюю їх на архітектури, якими можна керувати під тиском — стійкі, прозорі й достатньо прості, щоб пояснити їх на дошці. У вільний час роблю внесок у відкритий код і ходжу в гори.",
     "highlights": [
       "10+ років проєктування та впровадження розподілених систем від початку до кінця",
-      "Архітектура на всіх рівнях: React, Node.js, хмарна та локальна інфраструктура",
+      "Визначаю межі сервісів, контракти та компроміси на всіх рівнях — від React-інтерфейсів до Node.js-сервісів і хмарної та локальної інфраструктури",
       "Геопросторові дані та засоби ситуаційної обізнаності",
       "Зв’язок, що працює в деградованих, придушених і нестабільних мережах",
       "Учасник відкритих проєктів і прихильник постійного навчання"
@@ -34,7 +34,7 @@
     "bio": "I'm a software architect working where information systems meet communications. I take ambiguous, high-stakes problems and turn them into architectures people can operate under pressure — resilient, observable, and simple enough to explain on a whiteboard. Outside of work I contribute to open source and climb mountains.",
     "highlights": [
       "10+ years designing and shipping distributed systems end to end",
-      "Architecture across the stack: React, Node.js, cloud and on-prem infrastructure",
+      "I set service boundaries, contracts, and trade-offs across the stack — from React front ends to Node.js services and cloud or on-prem infrastructure",
       "Geospatial data and situational-awareness tooling",
       "Communications that survive degraded, contested, and intermittent networks",
       "Open-source contributor and lifelong learner"

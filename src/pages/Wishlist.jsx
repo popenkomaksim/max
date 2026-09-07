@@ -16,10 +16,12 @@ const STORAGE_KEY = 'wishlist-acquired'
 const CURRENCY_KEY = 'wishlist-currency'
 const CURRENCIES = ['UAH', 'USD']
 const priorityOrder = { high: 0, medium: 1, low: 2 }
-const priorityClasses = {
-  high: 'bg-rose-50 text-rose-700 dark:bg-rose-500/10 dark:text-rose-300',
-  medium: 'bg-amber-50 text-amber-700 dark:bg-amber-500/10 dark:text-amber-300',
-  low: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300',
+// The only colour in the list: a dot per priority, sized to read as punctuation
+// next to the mono meta line rather than as a badge.
+const priorityDotClasses = {
+  high: 'bg-rose-400 dark:bg-rose-500',
+  medium: 'bg-amber-400 dark:bg-amber-500',
+  low: 'bg-emerald-400 dark:bg-emerald-500',
 }
 
 // Ticking an item off is a local-only override on top of the JSON data, so the
@@ -36,10 +38,27 @@ function formatPrice(priceUsd, currency, rate) {
   return `₴${Math.round(priceUsd * rate).toLocaleString()}`
 }
 
+// Filter chips and the currency pair share one look: muted until selected,
+// then inverted against the page ground the way the site's copy hierarchy runs.
+function chipClasses(active) {
+  return `shrink-0 select-none whitespace-nowrap rounded-full px-2.5 py-1 font-mono text-xs transition-colors ${
+    active
+      ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900'
+      : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
+  }`
+}
+
 export default function Wishlist() {
   const { lang } = useLanguage()
   const t = translations[lang]
   const [acquiredOverrides, setAcquiredOverrides] = useState(loadAcquiredOverrides)
+  // Acquired items sink to the bottom, but the ranking is a snapshot taken at
+  // mount: ticking one off during the visit shouldn't slide the row out from
+  // under the pointer that just clicked it, and neither should a filter change.
+  // It's re-read on the next load, so the list still settles between visits.
+  const [acquiredAtLoad] = useState(
+    () => new Map(wishlistData.map((item) => [item.id, acquiredOverrides[item.id] ?? item.acquired])),
+  )
   const [categoryFilter, setCategoryFilter] = useState('all')
   const [hideAcquired, setHideAcquired] = useState(false)
   const [currency, setCurrency] = useState(() => (readString(CURRENCY_KEY) === 'USD' ? 'USD' : 'UAH'))
@@ -57,7 +76,8 @@ export default function Wishlist() {
     writeString(CURRENCY_KEY, currency)
   }, [currency])
 
-  // High-priority items first; the JSON keeps its own authoring order.
+  // Outstanding items first, high priority first within each group; the JSON
+  // keeps its own authoring order below that.
   const items = useMemo(
     () =>
       wishlistData
@@ -65,8 +85,12 @@ export default function Wishlist() {
           ...item,
           acquired: acquiredOverrides[item.id] ?? item.acquired,
         }))
-        .sort((a, b) => priorityOrder[a.priorityKey] - priorityOrder[b.priorityKey]),
-    [acquiredOverrides],
+        .sort(
+          (a, b) =>
+            Number(acquiredAtLoad.get(a.id)) - Number(acquiredAtLoad.get(b.id)) ||
+            priorityOrder[a.priorityKey] - priorityOrder[b.priorityKey],
+        ),
+    [acquiredOverrides, acquiredAtLoad],
   )
 
   const categories = useMemo(() => ['all', ...new Set(wishlistData.map((item) => item.categoryKey))], [])
@@ -76,11 +100,6 @@ export default function Wishlist() {
     if (categoryFilter !== 'all' && item.categoryKey !== categoryFilter) return false
     return true
   })
-
-  // Headline figure: what's still outstanding, so ticked-off items drop out.
-  const totalValue = items
-    .filter((item) => !item.acquired && typeof item.price === 'number')
-    .reduce((sum, item) => sum + item.price, 0)
 
   function toggleAcquired(id, current) {
     setAcquiredOverrides((prev) => ({ ...prev, [id]: !current }))
@@ -109,10 +128,10 @@ export default function Wishlist() {
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="stagger mx-auto max-w-[36.375rem] text-sm font-book leading-5 tracking-tightish text-slate-600 dark:text-slate-300">
       {new Date() < SUPPORT_BANNER_DEADLINE && (
-        <div className="flex flex-col items-center text-center">
-          <p className="mb-2 text-sm font-medium text-slate-500 dark:text-slate-400">{t.wishlist.supportJoke}</p>
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-center text-slate-400 dark:text-slate-500">{t.wishlist.supportJoke}</p>
           <LiquidButton
             text={t.wishlist.supportButton}
             width={320}
@@ -121,154 +140,153 @@ export default function Wishlist() {
         </div>
       )}
 
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">{t.wishlist.title}</h1>
-        <p className="mt-2 text-slate-600 dark:text-slate-300">
-          {t.wishlist.subtitlePrefix}{' '}
-          <span className="font-semibold tabular-nums text-slate-900 dark:text-white">
-            {formatPrice(totalValue, effectiveCurrency, rate)}
-          </span>
-        </p>
-        {currency === 'UAH' && (
-          <p className="mt-1 text-xs tabular-nums text-slate-400 dark:text-slate-500">
-            {rateError
-              ? t.wishlist.rateUnavailable
-              : rate
-                ? `${t.wishlist.rateNote} 1 $ = ${rate.toFixed(2)} ₴`
-                : t.wishlist.rateLoading}
-          </p>
-        )}
+      {/* One line, always: the row scrolls sideways rather than wrapping, so
+          the controls stay a single band above the list at any width. The
+          scrollbar is hidden — the chips running to the edge are the affordance. */}
+      <div
+        ref={filterRowRef}
+        onKeyDown={handleFilterKeyDown}
+        className="-ml-2.5 flex items-center gap-1 overflow-x-auto pt-8 [scrollbar-width:none] first:pt-0 [&::-webkit-scrollbar]:hidden"
+      >
+        {categories.map((category) => (
+          <button
+            key={category}
+            type="button"
+            onClick={() => setCategoryFilter(category)}
+            aria-pressed={categoryFilter === category}
+            data-filter-chip=""
+            className={chipClasses(categoryFilter === category)}
+          >
+            {category === 'all' ? t.wishlist.allCategories : t.category[category]}
+          </button>
+        ))}
+
+        <span aria-hidden="true" className="mx-1 h-3 w-px shrink-0 bg-slate-100 dark:bg-slate-800" />
+
+        {CURRENCIES.map((c) => (
+          <button
+            key={c}
+            type="button"
+            onClick={() => setCurrency(c)}
+            aria-pressed={currency === c}
+            className={chipClasses(currency === c)}
+          >
+            {c}
+          </button>
+        ))}
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div ref={filterRowRef} onKeyDown={handleFilterKeyDown} className="flex flex-wrap gap-2">
-          {categories.map((category) => (
-            <button
-              key={category}
-              type="button"
-              onClick={() => setCategoryFilter(category)}
-              aria-pressed={categoryFilter === category}
-              data-filter-chip=""
-              className={`select-none rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
-                categoryFilter === category
-                  ? 'bg-indigo-600 text-white'
-                  : 'bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700'
+      {/* Same rhythm as the numbered sections on Beliefs/Guidelines: hairline
+          rules between entries, no surrounding card. */}
+      <ol className="flex flex-col pt-6">
+        {visibleItems.map((item) => {
+          const i = item[lang]
+          return (
+            <li
+              key={item.id}
+              className={`flex gap-3 border-t border-slate-100 py-4 transition-opacity first:border-t-0 first:pt-0 dark:border-slate-800 ${
+                item.acquired ? 'opacity-50' : ''
               }`}
             >
-              {category === 'all' ? t.wishlist.allCategories : t.category[category]}
-            </button>
-          ))}
-          <div className="ml-2 flex gap-1 rounded-full bg-slate-100 p-1 dark:bg-slate-800">
-            {CURRENCIES.map((c) => (
               <button
-                key={c}
                 type="button"
-                onClick={() => setCurrency(c)}
-                aria-pressed={currency === c}
-                className={`select-none rounded-full px-3 py-1 text-sm font-medium transition-colors ${
-                  currency === c
-                    ? 'bg-indigo-600 text-white'
-                    : 'text-slate-700 hover:bg-slate-200 dark:text-slate-200 dark:hover:bg-slate-700'
+                onClick={() => toggleAcquired(item.id, item.acquired)}
+                aria-pressed={item.acquired}
+                aria-label={`${item.acquired ? t.wishlist.markNotAcquired : t.wishlist.markAcquired}: ${i.name}`}
+                className={`mt-0.5 inline-flex h-3.5 w-3.5 shrink-0 select-none items-center justify-center rounded-[3px] border transition-colors ${
+                  item.acquired
+                    ? 'border-slate-900 bg-slate-900 text-white dark:border-white dark:bg-white dark:text-slate-900'
+                    : 'border-slate-200 text-transparent hover:border-slate-400 dark:border-slate-700 dark:hover:border-slate-500'
                 }`}
               >
-                {c}
+                <Check size={10} strokeWidth={3} />
               </button>
-            ))}
-          </div>
-        </div>
 
-        <label className="flex cursor-pointer select-none items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
-          <input
-            type="checkbox"
-            checked={hideAcquired}
-            onChange={(event) => setHideAcquired(event.target.checked)}
-            className="h-4 w-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500 dark:border-slate-700"
-          />
-          {t.wishlist.hideAcquired}
-        </label>
-      </div>
-
-      <div className="overflow-hidden rounded-xl border border-slate-200 dark:border-slate-800">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-800/60 dark:text-slate-400">
-            <tr>
-              <th scope="col" className="px-4 py-3">{t.wishlist.colItem}</th>
-              <th scope="col" className="px-4 py-3">{t.wishlist.colCategory}</th>
-              <th scope="col" className="px-4 py-3">{t.wishlist.colPriority}</th>
-              <th scope="col" className="px-4 py-3">{t.wishlist.colPrice}</th>
-              <th scope="col" className="px-4 py-3">{t.wishlist.colAcquired}</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
-            {visibleItems.map((item) => {
-              const i = item[lang]
-              return (
-                <tr key={item.id} className={item.acquired ? 'opacity-60' : undefined}>
-                  <td className="px-4 py-3">
-                    <div className="font-medium">
-                      {item.url ? (
-                        <a
-                          href={item.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 hover:text-indigo-600 dark:hover:text-indigo-400"
-                        >
-                          {i.name} <ExternalLink size={14} />
-                        </a>
-                      ) : (
-                        i.name
-                      )}
-                    </div>
-                    <div className="whitespace-pre-line text-xs text-slate-500 dark:text-slate-400">{i.notes}</div>
-                  </td>
-                  <td className="px-4 py-3 text-slate-600 dark:text-slate-300">{t.category[item.categoryKey]}</td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${priorityClasses[item.priorityKey]}`}
-                    >
-                      {t.priority[item.priorityKey]}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 tabular-nums text-slate-600 dark:text-slate-300">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-baseline justify-between gap-4">
+                  <h2
+                    className={`font-medium text-slate-900 dark:text-white ${
+                      item.acquired ? 'line-through decoration-slate-300 dark:decoration-slate-600' : ''
+                    }`}
+                  >
+                    {item.url ? (
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="basic-link inline-flex items-baseline gap-1.5"
+                      >
+                        {i.name}
+                        <ExternalLink size={12} className="translate-y-px text-slate-400 dark:text-slate-500" />
+                      </a>
+                    ) : (
+                      i.name
+                    )}
+                  </h2>
+                  <span className="shrink-0 font-mono text-xs tabular-nums text-slate-600 dark:text-slate-300">
                     {formatPrice(item.price, effectiveCurrency, rate)}
-                  </td>
-                  <td className="px-4 py-3">
-                    <button
-                      type="button"
-                      onClick={() => toggleAcquired(item.id, item.acquired)}
-                      aria-pressed={item.acquired}
-                      aria-label={`${
-                        item.acquired ? t.wishlist.markNotAcquired : t.wishlist.markAcquired
-                      }: ${i.name}`}
-                      className={`inline-flex h-6 w-6 select-none items-center justify-center rounded-md border transition-colors ${
-                        item.acquired
-                          ? 'border-emerald-500 bg-emerald-500 text-white'
-                          : 'border-slate-300 text-transparent hover:border-slate-400 dark:border-slate-700'
-                      }`}
-                    >
-                      <Check size={14} />
-                    </button>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-        {visibleItems.length === 0 && (
-          // An empty state should hand back the action that resolves it; on a
-          // read-only list that's clearing the filters that emptied it.
-          <div className="flex flex-col items-center gap-3 px-4 py-8 text-center">
-            <p className="text-slate-500 dark:text-slate-400">{t.wishlist.empty}</p>
-            <button
-              type="button"
-              onClick={resetFilters}
-              className="select-none rounded-full bg-slate-100 px-3 py-1.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
-            >
-              {t.wishlist.emptyReset}
-            </button>
-          </div>
-        )}
-      </div>
+                  </span>
+                </div>
+
+                {i.notes && (
+                  <p className="whitespace-pre-line pt-1 text-slate-500 dark:text-slate-400">{i.notes}</p>
+                )}
+
+                <p className="flex items-center gap-2 pt-2 font-mono text-xs text-slate-500 dark:text-slate-400">
+                  <span>{t.category[item.categoryKey]}</span>
+                  <span aria-hidden="true">·</span>
+                  <span className="inline-flex items-center gap-1.5">
+                    <span
+                      aria-hidden="true"
+                      className={`inline-block h-1.5 w-1.5 rounded-full ${priorityDotClasses[item.priorityKey]}`}
+                    />
+                    {t.priority[item.priorityKey]}
+                  </span>
+                </p>
+              </div>
+            </li>
+          )
+        })}
+      </ol>
+
+      {visibleItems.length === 0 && (
+        // An empty state should hand back the action that resolves it; on a
+        // read-only list that's clearing the filters that emptied it.
+        <div className="flex flex-col items-start gap-2 pt-6">
+          <p className="text-slate-400 dark:text-slate-500">{t.wishlist.empty}</p>
+          <button
+            type="button"
+            onClick={resetFilters}
+            className="basic-link select-none text-slate-900 dark:text-white"
+          >
+            {t.wishlist.emptyReset}
+          </button>
+        </div>
+      )}
+
+      {/* Sits under the list it thins out, so the reader meets the rows first
+          and the switch second. */}
+      <label className="flex w-fit cursor-pointer select-none items-center gap-2 pt-8 font-mono text-xs text-slate-500 transition-colors hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
+        <input
+          type="checkbox"
+          checked={hideAcquired}
+          onChange={(event) => setHideAcquired(event.target.checked)}
+          className="h-3.5 w-3.5 rounded-[3px] border-slate-300 text-slate-900 focus:ring-0 focus:ring-offset-0 dark:border-slate-700 dark:bg-transparent dark:text-white"
+        />
+        {t.wishlist.hideAcquired}
+      </label>
+
+      {/* Closes the page: the rate is a footnote to the prices above, not a
+          heading for them. */}
+      {currency === 'UAH' && (
+        <p className="pt-10 font-mono text-xs tabular-nums text-slate-500 dark:text-slate-400">
+          {rateError
+            ? t.wishlist.rateUnavailable
+            : rate
+              ? `${t.wishlist.rateNote} 1 $ = ${rate.toFixed(2)} ₴`
+              : t.wishlist.rateLoading}
+        </p>
+      )}
     </div>
   )
 }
