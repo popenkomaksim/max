@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Briefcase, GraduationCap, Mountain } from 'lucide-react'
 import { useLanguage } from '../context/LanguageContext.jsx'
 import { translations } from '../i18n/translations.js'
@@ -32,9 +33,53 @@ function LaneMarker({ icon, className = '' }) {
   )
 }
 
+// A heading that also folds its lane away. The last visible lane renders inert
+// rather than disabled: a real `disabled` button drops out of the tab order, and
+// the heading is still worth reaching and reading when it's the only one left.
+function LaneHeading({ icon, label, lane, hiddenLane, onToggle }) {
+  const visible = hiddenLane !== lane
+  // Visible while something is hidden means this is the last lane standing.
+  const inert = visible && hiddenLane !== null
+
+  return (
+    <button
+      type="button"
+      aria-pressed={visible}
+      aria-disabled={inert}
+      onClick={() => onToggle(lane)}
+      className={`relative flex h-5 items-center rounded-sm pl-8 text-left outline-none focus-visible:ring-2 focus-visible:ring-slate-300 dark:focus-visible:ring-slate-600 ${
+        inert
+          ? 'cursor-default'
+          : 'cursor-pointer hover:text-slate-900 dark:hover:text-white'
+      } ${visible ? '' : 'text-slate-300 dark:text-slate-700'}`}
+    >
+      <LaneMarker icon={icon} />
+      {label}
+    </button>
+  )
+}
+
 export default function About() {
   const { lang } = useLanguage()
   const t = translations[lang]
+
+  // Both lanes open to start with. The invariant — never hide both — lives in
+  // the updater rather than only in the markup, so it holds however the toggle
+  // is reached.
+  const [hiddenLane, setHiddenLane] = useState(null)
+  const showWork = hiddenLane !== 'work'
+  const showMountains = hiddenLane !== 'mountains'
+
+  // Showing a lane always works; hiding one only works while the other is still
+  // up, so a click on the last visible heading is a no-op.
+  const toggleLane = (lane) =>
+    setHiddenLane((current) => (current ? (current === lane ? null : current) : lane))
+
+  // Filtered before the `gridRow` index is taken off it: numbering the full
+  // `events` array would leave a blank row wherever a hidden entry used to sit.
+  const visibleEvents = events.filter((entry) =>
+    entry.type === 'mountain' ? showMountains : showWork,
+  )
 
   return (
     <div className="stagger mx-auto max-w-[36.375rem] text-sm font-book leading-5 tracking-tightish text-slate-600 dark:text-slate-300">
@@ -45,35 +90,47 @@ export default function About() {
 
       {/* Heads the lane it names on `sm` and up. Below that the lanes merge
           into one column, so the pair falls back to reading as a legend for
-          the markers. */}
+          the markers — and as the only handle on what's currently folded away. */}
       <div className="flex gap-5 pt-4 text-slate-400 dark:text-slate-500 sm:grid sm:grid-cols-2 sm:gap-0">
-        <span className="relative flex h-5 items-center pl-8">
-          <LaneMarker icon={Briefcase} />
-          {t.about.workTitle}
-        </span>
-        <span className="relative flex h-5 items-center pl-8">
-          <LaneMarker icon={Mountain} />
-          {t.about.mountainsTitle}
-        </span>
+        <LaneHeading
+          icon={Briefcase}
+          label={t.about.workTitle}
+          lane="work"
+          hiddenLane={hiddenLane}
+          onToggle={toggleLane}
+        />
+        <LaneHeading
+          icon={Mountain}
+          label={t.about.mountainsTitle}
+          lane="mountains"
+          hiddenLane={hiddenLane}
+          onToggle={toggleLane}
+        />
       </div>
 
       {/* The padding sits outside the list so the spines can measure off the
           first entry rather than off the gap above it. */}
       <div className="pt-8">
         <ol className="relative grid grid-cols-1 gap-y-8 sm:grid-cols-2">
-          {/* One spine per lane. The columns are an even 50/50 split with no
-              x-gap — entries space themselves with their own padding instead —
-              which is what lets the second rail sit at a plain 50%. */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-y-2 left-2 w-px -translate-x-1/2 bg-slate-100 dark:bg-slate-800"
-          />
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-y-2 left-[calc(50%+0.5rem)] hidden w-px -translate-x-1/2 bg-slate-100 sm:block dark:bg-slate-800"
-          />
+          {/* One spine per lane, each dropped along with its lane. The columns
+              are an even 50/50 split with no x-gap — entries space themselves
+              with their own padding instead — which is what lets the second
+              rail sit at a plain 50%, and what keeps a lone visible lane on its
+              own side of the page rather than recentred. */}
+          {showWork && (
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-2 left-2 w-px -translate-x-1/2 bg-slate-100 dark:bg-slate-800"
+            />
+          )}
+          {showMountains && (
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-2 left-[calc(50%+0.5rem)] hidden w-px -translate-x-1/2 bg-slate-100 sm:block dark:bg-slate-800"
+            />
+          )}
 
-          {events.map((entry, index) => {
+          {visibleEvents.map((entry, index) => {
             const e = entry[lang]
             const isMountain = entry.type === 'mountain'
 
