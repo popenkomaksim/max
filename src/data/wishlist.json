@@ -35,7 +35,7 @@
     "priorityKey": "high",
     "price": 95,
     "url": "https://send.monobank.ua/jar/78kTAqpQPm",
-    "acquired": false,
+    "acquired": true,
     "uk": {
       "name": "Лабораторні медичні аналізи",
       "notes": "— Загальний аналіз крові з лейкоцитарною формулою та ШОЕ\n— Глюкоза плазми крові натще\n— Біохімічний аналіз крові (АЛТ, АСТ, білірубін загальний/прямий, сечовина, креатинін)\n— Тиреотропний гормон (ТТГ)\n— Трийодтиронін вільний (FT3)\n— Тироксин вільний (FT4)\n— Антитіла до тиреопероксидази (АТПО)\n— 25-гідроксивітамін D, 25(OH)D (Вітамін D3)\n— Феритин сироватки"
@@ -78,7 +78,7 @@
   {
     "id": "instrumental-studies",
     "categoryKey": "health",
-    "priorityKey": "medium",
+    "priorityKey": "high",
     "url": "https://send.monobank.ua/jar/8CqHeNr9qz",
     "price": 67,
     "acquired": false,
