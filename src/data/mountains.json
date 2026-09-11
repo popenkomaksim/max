@@ -100,5 +100,56 @@
       "location": "България (Bulgaria)",
       "summary": "2,914 m · Highest peak of the Pirin mountains"
     }
+  },
+  {
+    "id": "stubaier-gletscher",
+    "type": "mountain",
+    "year": 2026,
+    "uk": {
+      "name": "Stubaier Gletscher (Штубайський льодовик)",
+      "period": "2026",
+      "location": "Österreich (Австрія)",
+      "summary": "3 341 м · Stubaier Wildspitze, Штубайські Альпи, Тіроль"
+    },
+    "en": {
+      "name": "Stubaier Gletscher (Stubai Glacier)",
+      "period": "2026",
+      "location": "Österreich (Austria)",
+      "summary": "3,341 m · Stubaier Wildspitze, Stubai Alps, Tyrol"
+    }
+  },
+  {
+    "id": "adamello",
+    "type": "mountain",
+    "year": 2026,
+    "uk": {
+      "name": "Monte Adamello (Адамелло)",
+      "period": "2026",
+      "location": "Italia (Італія)",
+      "summary": "3 539 м · Найвища вершина масиву Адамелло"
+    },
+    "en": {
+      "name": "Monte Adamello (Mount Adamello)",
+      "period": "2026",
+      "location": "Italia (Italy)",
+      "summary": "3,539 m · Highest peak of the Adamello group"
+    }
+  },
+  {
+    "id": "etna",
+    "type": "mountain",
+    "year": 2026,
+    "uk": {
+      "name": "Etna (Етна)",
+      "period": "2026",
+      "location": "Italia (Італія)",
+      "summary": "3 403 м · Лише біля підніжжя вулкана 2,100 м"
+    },
+    "en": {
+      "name": "Etna (Mount Etna)",
+      "period": "2026",
+      "location": "Italia (Italy)",
+      "summary": "3,403 m · Only at the foot of the volcano 2,100 m"
+    }
   }
 ]
