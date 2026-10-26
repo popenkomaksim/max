@@ -135,3 +135,74 @@ body {
     transform: none !important;
   }
 }
+
+/* Sensor online-status post. Each tile sits on its own aerial crop (an <img>
+   in SensorStatus.jsx), the same in both themes, since symbol colours are
+   tuned for the map, not the page ground. The tile SVGs are injected markup,
+   so their colours and motion live here as custom properties and plain
+   classes rather than Tailwind utilities. */
+.sensor-sheet {
+  --map: #e2e8d6;
+  --sym: #000000;
+  --halo: #ffffff;
+  --friend: rgb(128, 224, 255);
+  --friend-dim: #bcdde6;
+  --dead: #c5cacb;
+  --track: #a9b1a6;
+  --ok: #12923a;
+  --warn: #c77700;
+  --off: #d1291f;
+  --ok-soft: #7fe394;
+  --warn-soft: #ffd35c;
+  --off-soft: #ff958b;
+  /* The APP-6D condition-bar colours, at full saturation as the standard
+     specifies them. */
+  --std-ok: rgb(0, 255, 0);
+  --std-warn: rgb(255, 255, 0);
+  --std-off: rgb(255, 0, 0);
+}
+
+/* Shows while a tile's crop is still loading. */
+.sensor-swatch {
+  background-color: var(--map);
+}
+
+/* Bare text labels sit straight on the imagery, so they get the white outline
+   map renderers use. Labels with a weight sit on their own bar or pill and
+   don't need it. */
+.sensor-swatch text:not([font-weight]) {
+  stroke: var(--halo);
+  stroke-width: 6px;
+  stroke-linejoin: round;
+  paint-order: stroke;
+}
+
+/* Each variant slows down for a stale link (`.slow`) and drops its animation
+   class entirely when offline. */
+.sensor-sheet .a { transform-box: fill-box; transform-origin: center; }
+.sensor-sheet .pulse { animation: sensor-pulse 1.8s ease-out infinite; }
+.sensor-sheet .pulse.slow { animation-duration: 4.2s; }
+.sensor-sheet .blink { animation: sensor-blink 1s steps(1) infinite; }
+.sensor-sheet .blink.slow { animation-duration: 3s; }
+.sensor-sheet .spin { animation: sensor-spin 6s linear infinite; }
+.sensor-sheet .spin.slow { animation-duration: 22s; }
+.sensor-sheet .breath { animation: sensor-breath 1.6s ease-in-out infinite alternate; }
+.sensor-sheet .breath.slow { animation-duration: 4s; }
+.sensor-sheet .trace { stroke-dasharray: 100; animation: sensor-trace 2s linear infinite; }
+.sensor-sheet .trace.slow { animation-duration: 5s; }
+
+@keyframes sensor-pulse { from { transform: scale(1); opacity: 0.85; } to { transform: scale(1.75); opacity: 0; } }
+@keyframes sensor-blink { 0% { opacity: 1; } 50% { opacity: 0.15; } }
+@keyframes sensor-spin { to { transform: rotate(360deg); } }
+@keyframes sensor-breath { from { opacity: 0.12; } to { opacity: 0.6; } }
+@keyframes sensor-trace { from { stroke-dashoffset: 100; } 70%, to { stroke-dashoffset: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .sensor-sheet .pulse,
+  .sensor-sheet .blink,
+  .sensor-sheet .spin,
+  .sensor-sheet .breath,
+  .sensor-sheet .trace {
+    animation: none;
+  }
+}

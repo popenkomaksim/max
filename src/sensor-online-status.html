@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>body{margin:0}img{max-width:100%}</style>
+<title>Sensor Online Status</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: a field-manual sheet. Sticky state switch on top, then five groups of map-swatch tiles, each tile one symbol drawn at map scale. */
+:root {
+  --bg: #eceee9;
+  --surface: #f8f9f6;
+  --ink: #1b2220;
+  --muted: #5a6661;
+  --line: #cdd4cd;
+  --accent: #0d5f78;
+  --accent-ink: #ffffff;
+  --map: #e2e8d6;
+  --map-grid: #c9d2bb;
+  /* Symbol colours sit on the map swatch, which stays a light sheet in both themes. */
+  --sym: #000000;
+  --halo: #ffffff;
+  --friend: rgb(128, 224, 255);
+  --friend-dim: #bcdde6;
+  --dead: #c5cacb;
+  --track: #a9b1a6;
+  --ok: #12923a;
+  --warn: #c77700;
+  --off: #d1291f;
+  --ok-soft: #7fe394;
+  --warn-soft: #ffd35c;
+  --off-soft: #ff958b;
+  --std-ok: rgb(0, 255, 0);
+  --std-warn: rgb(255, 255, 0);
+  --std-off: rgb(255, 0, 0);
+  --display: "Barlow Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #131918; --surface: #1b2322; --ink: #e3e8e5; --muted: #95a29d; --line: #2f3a38;
+    --accent: #74c6dc; --accent-ink: #0c1a1e; --map: #d3dac8; --map-grid: #bac4ab;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #131918; --surface: #1b2322; --ink: #e3e8e5; --muted: #95a29d; --line: #2f3a38;
+  --accent: #74c6dc; --accent-ink: #0c1a1e; --map: #d3dac8; --map-grid: #bac4ab;
+  color-scheme: dark;
+}
+
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 20px; padding-block: 36px 64px; display: flex; flex-direction: column; gap: 36px; }
+
+header { display: flex; flex-direction: column; gap: 12px; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--display); font-weight: 600; font-size: clamp(34px, 6vw, 54px); line-height: 1; margin: 0; text-wrap: balance; letter-spacing: .01em; }
+.lede { max-width: 66ch; margin: 0; color: var(--muted); }
+.sidc { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--mono); font-size: 13px; }
+.sidc b { font-weight: 500; color: var(--ink); }
+.sidc span { color: var(--muted); }
+
+.switch { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-block: 1px solid var(--line); padding-block: 10px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.switch-label { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; background: var(--surface); }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg label { padding: 7px 14px; cursor: pointer; font-weight: 500; font-size: 14px; border-right: 1px solid var(--line); display: flex; flex-direction: column; line-height: 1.25; }
+.seg label:last-of-type { border-right: 0; }
+.seg label small { font-family: var(--mono); font-size: 11px; font-weight: 400; color: var(--muted); }
+.seg input:checked + label { background: var(--accent); color: var(--accent-ink); }
+.seg input:checked + label small { color: var(--accent-ink); }
+.seg input:focus-visible + label { outline: 2px solid var(--ink); outline-offset: -3px; }
+
+section { display: flex; flex-direction: column; gap: 14px; }
+h2 { font-family: var(--display); font-weight: 600; font-size: 26px; line-height: 1.1; margin: 0; letter-spacing: .02em; text-transform: uppercase; }
+.group-note { margin: 0; max-width: 70ch; color: var(--muted); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
+
+.card { background: var(--surface); border: 1px solid var(--line); display: flex; flex-direction: column; min-width: 0; }
+.swatch { background-color: var(--map); background-image: linear-gradient(var(--map-grid) 1px, transparent 1px), linear-gradient(90deg, var(--map-grid) 1px, transparent 1px); background-size: 44px 44px; background-position: -1px -1px; border-bottom: 1px solid var(--line); }
+.swatch svg { display: block; width: 100%; height: auto; }
+.meta { padding: 12px 14px 14px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.name { display: flex; align-items: baseline; gap: 8px; margin: 0; font-size: 16px; font-weight: 600; line-height: 1.25; }
+.num { font-family: var(--mono); font-size: 12px; font-weight: 400; color: var(--muted); font-variant-numeric: tabular-nums; }
+.desc { margin: 0; font-size: 13.5px; color: var(--muted); flex: 1; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-family: var(--mono); font-size: 11px; padding: 2px 6px; border: 1px solid var(--line); color: var(--muted); }
+.tag.std { border-color: var(--accent); color: var(--accent); }
+
+.short { border-top: 1px solid var(--line); padding-top: 28px; }
+.short ol { margin: 0; padding-left: 20px; max-width: 70ch; display: flex; flex-direction: column; gap: 10px; }
+.short li b { font-weight: 600; }
+.limits { margin: 0; padding-left: 20px; max-width: 70ch; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
+
+/* Motion variants */
+.a { transform-box: fill-box; transform-origin: center; }
+.pulse { animation: pulse 1.8s ease-out infinite; }
+.pulse.slow { animation-duration: 4.2s; }
+.blink { animation: blink 1s steps(1) infinite; }
+.blink.slow { animation-duration: 3s; }
+.spin { animation: spin 6s linear infinite; }
+.spin.slow { animation-duration: 22s; }
+.breath { animation: breath 1.6s ease-in-out infinite alternate; }
+.breath.slow { animation-duration: 4s; }
+.trace { stroke-dasharray: 100; animation: trace 2s linear infinite; }
+.trace.slow { animation-duration: 5s; }
+@keyframes pulse { from { transform: scale(1); opacity: .85; } to { transform: scale(1.75); opacity: 0; } }
+@keyframes blink { 0% { opacity: 1; } 50% { opacity: .15; } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes breath { from { opacity: .12; } to { opacity: .6; } }
+@keyframes trace { from { stroke-dashoffset: 100; } 70%, to { stroke-dashoffset: 0; } }
+@media (prefers-reduced-motion: reduce) { .pulse, .blink, .spin, .breath, .trace { animation: none; } }
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">APP-6D · Land Equipment · option sheet</div>
+    <h1>Sensor Online Status</h1>
+    <p class="lede">Thirty ways to show on the map whether a generic sensor is reachable. Every tile draws the same friendly symbol at map scale and changes only the status treatment. Switch the state to see how each one reads when the link goes stale or drops.</p>
+    <div class="sidc">
+      <div><span>SIDC</span> <b>10031500002201000000</b></div>
+      <div><span>Symbol set</span> <b>15</b></div>
+      <div><span>Entity</span> <b>220100 Sensor</b></div>
+      <div><span>Identity</span> <b>3 Friend</b></div>
+    </div>
+  </header>
+
+  <div class="switch">
+    <span class="switch-label" id="state-label">Device state</span>
+    <div class="seg" role="radiogroup" aria-labelledby="state-label">
+      <input type="radio" name="state" id="st-online" value="online" checked><label for="st-online">Online<small>ping 12 s ago</small></label>
+      <input type="radio" name="state" id="st-stale" value="stale"><label for="st-stale">Stale<small>ping 4 min ago</small></label>
+      <input type="radio" name="state" id="st-offline" value="offline"><label for="st-offline">Offline<small>ping 2 h ago</small></label>
+    </div>
+  </div>
+
+  <div id="groups"></div>
+
+  <section class="short">
+    <h2>Suggested shortlist</h2>
+    <ol>
+      <li><b>Shape-coded badge (30) as the steady state.</b> It reads at a glance, survives colour-blindness and green terrain, and leaves the standard fields free for what they mean.</li>
+      <li><b>Time-since label (5) for stale and offline only.</b> An online sensor needs no text. A silent one needs the answer to "since when", and field G is a standard slot for it.</li>
+      <li><b>Pulsing halo (15) once per received ping, not continuously.</b> A single pulse confirms a live link without a map full of permanent motion.</li>
+    </ol>
+    <h2>Limits to check first</h2>
+    <ul class="limits">
+      <li>The standard's bar colours describe capability. Yellow means Damaged and red means Destroyed, so using them for link state changes their meaning for anyone trained on APP-6D.</li>
+      <li>The app's map canvas does not draw the condition bar for non-mine symbols today. Variants 1 and 6 need the SVG path or new canvas code.</li>
+      <li>Colour-only variants fail for red-green colour-blind users and lose contrast on green map tiles.</li>
+      <li>Continuous motion needs a redraw every frame on an OpenLayers canvas. Cost grows with the number of sensors on screen.</li>
+    </ul>
+  </section>
+</div>
+
+<script>
+const GLYPH = 'm 100,60 c 0,15 25,40 40,40 -15,0 -40,25 -40,40 0,-15 -25,-40 -40,-40 15,0 40,-25 40,-40 z';
+const STATES = {
+  online:  { label: 'ONLINE',  short: 'ON',   ago: '12 s',  dtg: '131042Z', c: 'var(--ok)',   soft: 'var(--ok-soft)',   std: 'var(--std-ok)',   frac: 0.9,  bars: 4, arcs: 3, hist: [1, 1, 1, 1, 1], speed: '' },
+  stale:   { label: 'STALE',   short: 'LATE', ago: '4 min', dtg: '131038Z', c: 'var(--warn)', soft: 'var(--warn-soft)', std: 'var(--std-warn)', frac: 0.3,  bars: 2, arcs: 1, hist: [1, 1, 1, 0, 0], speed: ' slow' },
+  offline: { label: 'OFFLINE', short: 'OFF',  ago: '2 h',   dtg: '130842Z', c: 'var(--off)',  soft: 'var(--off-soft)',  std: 'var(--std-off)',  frac: 0,    bars: 0, arcs: 0, hist: [0, 0, 0, 0, 0], speed: '' },
+};
+
+const base = (o = {}) => {
+  const { fill = 'var(--friend)', stroke = 'var(--sym)', sw = 4, dash = '', glyph = 'var(--sym)', op = 1 } = o;
+  return `<g opacity="${op}"><circle cx="100" cy="100" r="60" style="fill:${fill};stroke:${stroke}" stroke-width="${sw}" ${dash ? `stroke-dasharray="${dash}"` : ''}/><path d="${GLYPH}" style="fill:${glyph};stroke:${glyph}" stroke-width="3"/></g>`;
+};
+const txt = (x, y, s, anchor = 'start', size = 34, extra = '') =>
+  `<text x="${x}" y="${y}" text-anchor="${anchor}" font-size="${size}" font-family="Arial, Helvetica, sans-serif" style="fill:var(--sym)" ${extra}>${s}</text>`;
+const dot = (x, y, r, fill, stroke = 'var(--halo)', sw = 5, cls = '') =>
+  `<circle cx="${x}" cy="${y}" r="${r}" class="${cls}" style="fill:${fill};stroke:${stroke}" stroke-width="${sw}"/>`;
+const ring = (r, stroke, sw, extra = '', cls = '') =>
+  `<circle cx="100" cy="100" r="${r}" class="${cls}" fill="none" style="stroke:${stroke}" stroke-width="${sw}" ${extra}/>`;
+const BEAT = 'l8,-24 l10,44 l8,-30 l6,10';
+
+const GROUPS = [
+  { title: 'Standard symbol fields', note: 'These use positions APP-6D already defines, so milsymbol can draw most of them from the SIDC or its options.', items: [
+    { n: 'Condition bar', k: 'std', t: ['colour only'], d: 'Status digit 2 draws the green Fully Capable bar under the frame. Stale and offline borrow the yellow and red bars.',
+      draw: s => base() + `<rect x="40" y="168" width="120" height="22" style="fill:${s.std};stroke:var(--sym)" stroke-width="4"/>` },
+    { n: 'Dashed frame', k: 'std', t: ['two states'], d: 'Status digit 1 (Anticipated) dashes the frame when the link is lost. Online is a solid frame, so stale has no look of its own.',
+      draw: (s, k) => base({ dash: k === 'offline' ? '13 10' : '' }) },
+    { n: 'Text label', k: 'std', t: [], d: 'The word itself in field H, additional information, to the right of the frame.',
+      draw: s => base() + txt(180, 112, s.label) },
+    { n: 'Last-contact DTG', k: 'std', t: [], d: 'Field W, date-time group, top left: the Zulu time of the last ping. The reader does the subtraction.',
+      draw: s => base() + txt(20, 52, s.dtg, 'end') },
+    { n: 'Time-since-last-ping label', k: 'std', t: [], d: 'Field G, staff comments: elapsed time since the last ping, already subtracted.',
+      draw: s => base() + txt(180, 82, s.ago) },
+    { n: 'Top bar', k: 'std', t: [], d: 'The engagement bar slot above the frame, reused for link state with a short code and a fill colour.',
+      draw: s => base() + `<rect x="40" y="3" width="120" height="30" style="fill:${s.soft};stroke:var(--sym)" stroke-width="4"/>` + txt(100, 27, s.short, 'middle', 23, 'font-weight="bold"') },
+    { n: 'Diagonals for trouble', k: 'std', t: ['absence = online'], d: 'The standard alternative to the bar: one slash when stale, a cross when offline. A clean symbol means online.',
+      draw: (s, k) => base() + (k !== 'online' ? `<path d="M30,170 L170,30${k === 'offline' ? ' M30,30 L170,170' : ''}" fill="none" style="stroke:var(--sym)" stroke-width="7"/>` : '') },
+  ] },
+  { title: 'Colour on the symbol', note: 'App conventions that recolour or decorate the symbol. Cheap to draw, but most of them rely on colour alone.', items: [
+    { n: 'Green dot', k: 'app', t: ['colour only'], d: 'A status dot on the top-right corner with a white ring so it holds on any map tile.',
+      draw: s => base() + dot(150, 50, 17, s.c) },
+    { n: 'Inset dot', k: 'app', t: ['colour only'], d: 'A small dot inside the frame. Nothing grows outside the symbol, so the click target and clustering stay unchanged.',
+      draw: s => base() + dot(137, 63, 9, s.c, 'var(--sym)', 2) },
+    { n: 'Frame colour', k: 'app', t: ['colour only'], d: 'The frame outline takes the state colour. Affiliation still reads from the fill and shape.',
+      draw: s => base({ stroke: s.c, sw: 8 }) },
+    { n: 'Fill fades', k: 'app', t: ['absence = online'], d: 'The friendly blue fill pales when stale and turns grey when offline. Costs some affiliation colour.',
+      draw: (s, k) => base({ fill: k === 'online' ? 'var(--friend)' : k === 'stale' ? 'var(--friend-dim)' : 'var(--dead)' }) },
+    { n: 'Glyph colour', k: 'app', t: ['colour only'], d: 'The sensor glyph inside the frame is drawn in the state colour.',
+      draw: s => base({ glyph: s.c }) },
+    { n: 'Outer ring', k: 'app', t: ['colour only'], d: 'A static coloured ring around the frame. Competes with the selection ring if that is also a circle.',
+      draw: s => ring(73, s.c, 6) + base() },
+    { n: 'Opacity', k: 'app', t: ['absence = online'], d: 'The whole symbol fades with link age. Offline devices recede, which also makes them easy to miss.',
+      draw: (s, k) => base({ op: k === 'online' ? 1 : k === 'stale' ? 0.55 : 0.28 }) },
+  ] },
+  { title: 'Motion', note: 'Animated treatments. Each slows down when stale and stops when offline.', items: [
+    { n: 'Pulsing halo', k: 'app', t: ['motion'], d: 'A ring expands from the frame and fades. Reads as "alive" from across the room.',
+      draw: (s, k) => (k !== 'offline' ? ring(60, s.c, 7, '', 'a pulse' + s.speed) : '') + base() },
+    { n: 'Sonar rings', k: 'app', t: ['motion'], d: 'Three thin staggered rings, like a transmitter. One slow ring when stale.',
+      draw: (s, k) => (k === 'online' ? [0, 0.6, 1.2].map(d => ring(60, s.c, 3, `style="stroke:${s.c};animation-delay:${d}s"`, 'a pulse')).join('') : k === 'stale' ? ring(60, s.c, 3, '', 'a pulse slow') : '') + base() },
+    { n: 'Blinking LED', k: 'app', t: ['motion', 'colour only'], d: 'The corner dot blinks like a heartbeat LED: fast online, slow when stale, steady grey when offline.',
+      draw: (s, k) => base() + dot(150, 50, 15, k === 'offline' ? 'var(--dead)' : s.c, 'var(--sym)', 2, k === 'offline' ? '' : 'blink' + s.speed) },
+    { n: 'Heartbeat trace', k: 'app', t: ['motion'], d: 'An ECG line under the symbol: two beats online, one when stale, flat when offline. The shape carries the state.',
+      draw: (s, k) => base() + `<path pathLength="100" class="${k === 'offline' ? '' : 'trace' + s.speed}" fill="none" stroke-linejoin="round" style="stroke:${s.c}" stroke-width="5" d="M20,190 ${k === 'offline' ? 'H180' : k === 'stale' ? `H60 ${BEAT} H180` : `H60 ${BEAT} H120 ${BEAT} H180`}"/>` },
+    { n: 'Rotating ring', k: 'app', t: ['motion'], d: 'A dashed ring turns while pings arrive, slows when stale and freezes in grey when the device is silent.',
+      draw: (s, k) => ring(74, k === 'offline' ? 'var(--track)' : s.c, 5, 'stroke-dasharray="18 13"', k === 'offline' ? '' : 'a spin' + s.speed) + base() },
+    { n: 'Breathing glow', k: 'app', t: ['motion', 'colour only'], d: 'A soft disc behind the frame brightens and dims. Quieter than a halo, and gone when offline.',
+      draw: (s, k) => (k !== 'offline' ? `<circle cx="100" cy="100" r="82" class="breath${s.speed}" style="fill:${s.c}"/>` : '') + base() },
+  ] },
+  { title: 'Meters', note: 'Treatments that show how good or how fresh the link is, not only whether it exists.', items: [
+    { n: 'Signal bars', k: 'app', t: [], d: 'Phone-style bars beside the frame. Familiar to everyone, and bar count works without colour.',
+      draw: s => base() + [0, 1, 2, 3].map(i => `<rect x="${166 + i * 13}" y="${52 - (10 + i * 8)}" width="9" height="${10 + i * 8}" style="fill:${i < s.bars ? s.c : 'var(--halo)'};stroke:var(--sym)" stroke-width="1.5"/>`).join('') },
+    { n: 'Radio arcs', k: 'app', t: [], d: 'Wi-Fi style arcs above the frame. Fewer arcs light up as the link weakens.',
+      draw: s => base() + [12, 24, 36].map((r, i) => `<path d="M${100 - r * 0.707},${28 - r * 0.707} A${r},${r} 0 0 1 ${100 + r * 0.707},${28 - r * 0.707}" fill="none" stroke-linecap="round" style="stroke:${i < s.arcs ? s.c : 'var(--track)'}" stroke-width="6"/>`).join('') + dot(100, 28, 4, s.arcs ? s.c : 'var(--track)', 'none', 0) },
+    { n: 'Freshness ring', k: 'app', t: [], d: 'An arc around the frame drains as the time since the last ping approaches the timeout, then refills on the next ping.',
+      draw: s => ring(74, 'var(--track)', 3) + ring(74, s.c, 8, `pathLength="100" stroke-dasharray="${s.frac * 100} 100" transform="rotate(-90 100 100)"`) + base() },
+    { n: 'Freshness bar', k: 'app', t: [], d: 'The same countdown as a bar under the symbol. Sits where the condition bar goes, so the two cannot both be shown.',
+      draw: s => base() + `<rect x="40" y="170" width="120" height="14" style="fill:var(--halo);stroke:var(--sym)" stroke-width="2"/><rect x="41" y="171" width="${118 * s.frac}" height="12" style="fill:${s.c}"/>` },
+    { n: 'Ping history', k: 'app', t: [], d: 'The last five expected pings as squares, newest on the right. Filled is received, empty is missed. Shows a flapping link.',
+      draw: s => base() + s.hist.map((h, i) => `<rect x="${42 + i * 24}" y="170" width="20" height="20" style="fill:${h ? 'var(--ok)' : 'var(--halo)'};stroke:var(--sym)" stroke-width="2"/>`).join('') },
+  ] },
+  { title: 'Labels and badges', note: 'App conventions that pair a word, number or shape with the colour, so the state survives without colour.', items: [
+    { n: 'Status pill', k: 'app', t: [], d: 'A coloured pill under the symbol with the state spelled out.',
+      draw: s => base() + `<rect x="33" y="170" width="134" height="36" rx="18" style="fill:${s.c}"/>` + `<text x="100" y="196" text-anchor="middle" font-size="22" font-weight="bold" letter-spacing="1" font-family="Arial, Helvetica, sans-serif" style="fill:var(--halo)">${s.label}</text>` },
+    { n: 'Time chip', k: 'app', t: [], d: 'A clock and the elapsed time in a chip outlined in the state colour. Works where the standard text slots are already used.',
+      draw: s => base() + `<rect x="40" y="170" width="120" height="36" rx="6" style="fill:var(--halo);stroke:${s.c}" stroke-width="4"/><circle cx="62" cy="188" r="9" fill="none" style="stroke:var(--sym)" stroke-width="2.5"/><path d="M62,182 V188 H67" fill="none" style="stroke:var(--sym)" stroke-width="2.5"/>` + txt(79, 197, s.ago, 'start', 24) },
+    { n: 'Designation with link arrow', k: 'std', t: [], d: 'Field T, unique designation, with a marker before it: up arrow online, dash when stale, down arrow offline.',
+      draw: (s, k) => base() + txt(20, 160, 'S-07', 'end') + (k === 'online' ? `<path d="M-92,160 l15,-26 l15,26 z" style="fill:${s.c}"/>` : k === 'stale' ? `<rect x="-92" y="142" width="30" height="8" style="fill:${s.c}"/>` : `<path d="M-92,134 l15,26 l15,-26 z" style="fill:${s.c}"/>`) },
+    { n: 'Tick or cross badge', k: 'app', t: [], d: 'A corner badge with a tick, an exclamation mark or a cross. The mark carries the state, the colour reinforces it.',
+      draw: (s, k) => base() + dot(150, 50, 19, s.c, 'var(--halo)', 4) + `<path fill="none" stroke-linecap="round" stroke-linejoin="round" style="stroke:var(--halo)" stroke-width="4.5" d="${k === 'online' ? 'M141,50 l6,7 l12,-14' : k === 'stale' ? 'M150,39 V52 M150,60 v.5' : 'M143,43 L157,57 M157,43 L143,57'}"/>` },
+    { n: 'Shape-coded badge', k: 'app', t: [], d: 'Circle online, triangle stale, square offline. Three shapes that stay distinct in greyscale and at small sizes.',
+      draw: (s, k) => base() + (k === 'online' ? dot(150, 50, 17, s.c, 'var(--halo)', 4) : k === 'stale' ? `<path d="M150,28 L172,66 L128,66 z" stroke-linejoin="round" style="fill:${s.c};stroke:var(--halo)" stroke-width="4"/>` : `<rect x="133" y="33" width="34" height="34" style="fill:${s.c};stroke:var(--halo)" stroke-width="4"/>`) },
+  ] },
+];
+
+const root = document.getElementById('groups');
+root.style.display = 'flex'; root.style.flexDirection = 'column'; root.style.gap = '36px';
+const tiles = [];
+let n = 0;
+for (const g of GROUPS) {
+  const sec = document.createElement('section');
+  sec.innerHTML = `<h2>${g.title}</h2><p class="group-note">${g.note}</p><div class="grid"></div>`;
+  const grid = sec.querySelector('.grid');
+  for (const v of g.items) {
+    n += 1;
+    const card = document.createElement('article');
+    card.className = 'card';
+    const tags = [`<span class="tag ${v.k}">${v.k === 'std' ? 'APP-6D field' : 'app convention'}</span>`, ...v.t.map(t => `<span class="tag">${t}</span>`)].join('');
+    card.innerHTML = `<div class="swatch"><svg viewBox="-170 -50 540 320" role="img" aria-label="${v.n}"></svg></div><div class="meta"><h3 class="name"><span class="num">${String(n).padStart(2, '0')}</span>${v.n}</h3><p class="desc">${v.d}</p><div class="tags">${tags}</div></div>`;
+    tiles.push([card.querySelector('svg'), v]);
+    grid.appendChild(card);
+  }
+  root.appendChild(sec);
+}
+
+function render(key) {
+  for (const [svg, v] of tiles) svg.innerHTML = v.draw(STATES[key], key);
+}
+document.querySelectorAll('input[name="state"]').forEach(el => el.addEventListener('change', () => render(el.value)));
+render(document.querySelector('input[name="state"]:checked').value);
+</script>
+</body>
+</html>

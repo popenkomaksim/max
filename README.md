@@ -9,6 +9,7 @@ Personal single-page site built with React, Vite, Tailwind CSS, and `react-route
 - `/about` — Experience timeline
 - `/beliefs` — Things I currently believe
 - `/guidelines` — Web interface guidelines, inspired by interfaces.rauno.me
+- `/sensor-online-status` — Post: thirty ways to show a sensor's link state on an APP-6D map symbol, with a live state switch
 
 ## Development
 
