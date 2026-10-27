@@ -20,6 +20,9 @@ const dot = (x, y, r, fill, stroke = 'var(--halo)', sw = 5, cls = '') =>
 const ring = (r, stroke, sw, extra = '', cls = '') =>
   `<circle cx="100" cy="100" r="${r}" class="${cls}" fill="none" style="stroke:${stroke}" stroke-width="${sw}" ${extra}/>`
 const BEAT = 'l8,-24 l10,44 l8,-30 l6,10'
+// Corner badge whose shape carries the state: circle, triangle, square.
+const shapeBadge = (s, k) =>
+  (k === 'online' ? dot(150, 50, 17, s.c, 'var(--halo)', 4) : k === 'stale' ? `<path d="M150,28 L172,66 L128,66 z" stroke-linejoin="round" style="fill:${s.c};stroke:var(--halo)" stroke-width="4"/>` : `<rect x="133" y="33" width="34" height="34" style="fill:${s.c};stroke:var(--halo)" stroke-width="4"/>`)
 
 // Per-state drawing parameters. `label`/`short` are the words drawn on the
 // symbol; they stay in English in both languages, as map labels would.
@@ -31,8 +34,42 @@ export const STATES = {
 
 export const STATE_KEYS = Object.keys(STATES)
 
+// What a variant looks like at fleet scale: `count` copies of its symbol,
+// shrunk and scattered over the swatch's 1620×320 (3 × 540:320) area, each in
+// a random state and with a random `--d` so animations drift out of phase.
+// Positions are free-form rather than gridded, but each copy keeps a minimum
+// gap so frames don't sit on top of each other (relaxed after enough misses
+// so placement always finishes). Random per page load, so the spread differs
+// on every visit.
+export const CROWD_SIZE = 34
+const CROWD_SCALE = 0.5
+const CROWD_STATES = [...Array(6).fill('online'), ...Array(3).fill('stale'), 'offline']
+export const drawCrowd = (draw, count) => {
+  const margin = 70 * CROWD_SCALE
+  const between = (lo, hi) => lo + Math.random() * (hi - lo)
+  const points = []
+  let gap = 150 * CROWD_SCALE
+  for (let misses = 0; points.length < count; ) {
+    const x = between(margin, 1620 - margin)
+    const y = between(margin, 320 - margin)
+    if (points.every(([px, py]) => Math.hypot(px - x, py - y) >= gap)) {
+      points.push([x, y])
+    } else if (++misses % 200 === 0) {
+      gap *= 0.9
+    }
+  }
+  return points
+    .map(([x, y]) => {
+      const key = CROWD_STATES[Math.floor(Math.random() * CROWD_STATES.length)]
+      return `<g transform="translate(${x.toFixed(1)},${y.toFixed(1)}) scale(${CROWD_SCALE}) translate(-100,-100)" style="--d:${(-Math.random() * 3).toFixed(2)}s">${draw(STATES[key], key)}</g>`
+    })
+    .join('')
+}
+
 // `k` marks whether the variant uses a field APP-6D already defines ('std') or
 // is an app-side convention ('app'). `t` are trait tags, keyed into `traits`.
+// An optional `no` in the copy marks the variant as not recommended and gives
+// the reason; the page crosses out the whole tile.
 // Each `draw(state, key)` gets a STATES entry and its key.
 export const GROUPS = [
   {
@@ -60,8 +97,8 @@ export const GROUPS = [
       },
       {
         k: 'std', t: [],
-        uk: { n: 'DTG останнього контакту', d: 'Поле W (дата-час) зліва вгорі: час останнього пінгу за Зулу. Віднімати доводиться читачеві.' },
-        en: { n: 'Last-contact DTG', d: 'Field W, date-time group, top left: the Zulu time of the last ping. The reader does the subtraction.' },
+        uk: { n: 'DTG останнього контакту', d: 'Поле W (дата-час) зліва вгорі: час останнього пінгу за Зулу. Віднімати доводиться читачеві.', no: 'Як допоміжна деталь — так, але не як основний спосіб показати, чи сенсор онлайн: щоб зрозуміти стан, треба прочитати час і порахувати в голові.' },
+        en: { n: 'Last-contact DTG', d: 'Field W, date-time group, top left: the Zulu time of the last ping. The reader does the subtraction.', no: 'Fine as a supporting detail, but not as the main way to show whether the sensor is online: you have to read the time and do the maths to know the state.' },
         draw: (s) => base() + txt(20, 52, s.dtg, 'end'),
       },
       {
@@ -72,14 +109,14 @@ export const GROUPS = [
       },
       {
         k: 'std', t: [],
-        uk: { n: 'Верхня смуга', d: 'Місце смуги ураження над рамкою, використане під стан зв’язку: короткий код і колір заливки.' },
-        en: { n: 'Top bar', d: 'The engagement bar slot above the frame, reused for link state with a short code and a fill colour.' },
+        uk: { n: 'Верхня смуга', d: 'Місце смуги ураження над рамкою, використане під стан зв’язку: короткий код і колір заливки.', no: 'Позиція стандартна, а значення — ні. У APP-6D ця смуга (поле AO) показує стан ураження цілі, тож оператор прочитає її як дані про бій, а не про зв’язок.' },
+        en: { n: 'Top bar', d: 'The engagement bar slot above the frame, reused for link state with a short code and a fill colour.', no: 'The slot is standard, the meaning is not. In APP-6D this bar (field AO) carries target engagement status, so an operator will read it as combat data, not link state.' },
         draw: (s) => base() + `<rect x="40" y="3" width="120" height="30" style="fill:${s.soft};stroke:var(--sym)" stroke-width="4"/>` + txt(100, 27, s.short, 'middle', 23, 'font-weight="bold"'),
       },
       {
         k: 'std', t: ['absenceOnline'],
-        uk: { n: 'Діагоналі для проблем', d: 'Стандартна альтернатива смузі: одна риска для «застарілого», хрест для «офлайн». Чистий символ означає онлайн.' },
-        en: { n: 'Diagonals for trouble', d: 'The standard alternative to the bar: one slash when stale, a cross when offline. A clean symbol means online.' },
+        uk: { n: 'Діагоналі для проблем', d: 'Стандартна альтернатива смузі: одна риска для «застарілого», хрест для «офлайн». Чистий символ означає онлайн.', no: 'У APP-6D одна риска означає «Damaged», а хрест — «Destroyed». Перекреслений сенсор читається як знищений, а не як такий, що мовчить.' },
+        en: { n: 'Diagonals for trouble', d: 'The standard alternative to the bar: one slash when stale, a cross when offline. A clean symbol means online.', no: 'In APP-6D one slash means Damaged and a cross means Destroyed. A crossed-out sensor reads as destroyed, not as silent.' },
         draw: (s, k) => base() + (k !== 'online' ? `<path d="M30,170 L170,30${k === 'offline' ? ' M30,30 L170,170' : ''}" fill="none" style="stroke:var(--sym)" stroke-width="7"/>` : ''),
       },
     ],
@@ -103,20 +140,20 @@ export const GROUPS = [
       },
       {
         k: 'app', t: ['colourOnly'],
-        uk: { n: 'Колір рамки', d: 'Контур рамки набуває кольору стану. Приналежність досі читається із заливки та форми.' },
-        en: { n: 'Frame colour', d: 'The frame outline takes the state colour. Affiliation still reads from the fill and shape.' },
+        uk: { n: 'Колір рамки', d: 'Контур рамки набуває кольору стану. Приналежність досі читається із заливки та форми.', no: 'Порушує APP-6D: рамка має бути чорною, а колір рамки в стандарті вже має власне значення — ним позначають приналежність, коли символ без заливки.' },
+        en: { n: 'Frame colour', d: 'The frame outline takes the state colour. Affiliation still reads from the fill and shape.', no: 'Breaks APP-6D: the frame is meant to be black, and frame colour already has a meaning in the standard: it carries affiliation when a symbol is unfilled.' },
         draw: (s) => base({ stroke: s.c, sw: 8 }),
       },
       {
         k: 'app', t: ['absenceOnline'],
-        uk: { n: 'Згасання заливки', d: 'Блакитна «дружня» заливка блідне, коли дані застарілі, і сіріє в офлайні. Трохи жертвуємо кольором приналежності.' },
-        en: { n: 'Fill fades', d: 'The friendly blue fill pales when stale and turns grey when offline. Costs some affiliation colour.' },
+        uk: { n: 'Згасання заливки', d: 'Блакитна «дружня» заливка блідне, коли дані застарілі, і сіріє в офлайні. Трохи жертвуємо кольором приналежності.', no: 'Погано читається: бліда заливка ледь відрізняється від нормальної, а на світлих тайлах мапи символ просто губиться.' },
+        en: { n: 'Fill fades', d: 'The friendly blue fill pales when stale and turns grey when offline. Costs some affiliation colour.', no: 'Poor legibility: the paled fill is barely distinguishable from the normal one, and on light map tiles the symbol just gets lost.' },
         draw: (s, k) => base({ fill: k === 'online' ? 'var(--friend)' : k === 'stale' ? 'var(--friend-dim)' : 'var(--dead)' }),
       },
       {
         k: 'app', t: ['colourOnly'],
-        uk: { n: 'Колір гліфа', d: 'Гліф сенсора всередині рамки малюється кольором стану.' },
-        en: { n: 'Glyph colour', d: 'The sensor glyph inside the frame is drawn in the state colour.' },
+        uk: { n: 'Колір гліфа', d: 'Гліф сенсора всередині рамки малюється кольором стану.', no: 'Порушує колірні конвенції APP-6D: іконка всередині рамки має бути чорною, а колір у символі зарезервований за приналежністю.' },
+        en: { n: 'Glyph colour', d: 'The sensor glyph inside the frame is drawn in the state colour.', no: 'Breaks APP-6D colour conventions: the icon inside the frame is meant to be black, and colour on the symbol is reserved for affiliation.' },
         draw: (s) => base({ glyph: s.c }),
       },
       {
@@ -140,8 +177,8 @@ export const GROUPS = [
     items: [
       {
         k: 'app', t: ['motion'],
-        uk: { n: 'Пульсуюче гало', d: 'Кільце розходиться від рамки й тане. Читається як «живий» з іншого кінця кімнати.' },
-        en: { n: 'Pulsing halo', d: 'A ring expands from the frame and fades. Reads as "alive" from across the room.' },
+        uk: { n: 'Пульсуюче гало', d: 'Кільце розходиться від рамки й тане. Читається як «живий» з іншого кінця кімнати.', no: 'Офлайн не впізнати однозначно: без гало сенсор виглядає так само, як онлайн-сенсор між двома імпульсами.' },
+        en: { n: 'Pulsing halo', d: 'A ring expands from the frame and fades. Reads as "alive" from across the room.', no: 'Offline is not unambiguous: with no halo the sensor looks just like an online one between two pulses.' },
         draw: (s, k) => (k !== 'offline' ? ring(60, s.c, 7, '', 'a pulse' + s.speed) : '') + base(),
       },
       {
@@ -201,14 +238,14 @@ export const GROUPS = [
       },
       {
         k: 'app', t: [],
-        uk: { n: 'Смуга свіжості', d: 'Той самий відлік у вигляді смуги під символом. Займає місце смуги стану, тож показати обидві не вийде.' },
-        en: { n: 'Freshness bar', d: 'The same countdown as a bar under the symbol. Sits where the condition bar goes, so the two cannot both be shown.' },
+        uk: { n: 'Смуга свіжості', d: 'Той самий відлік у вигляді смуги під символом. Займає місце смуги стану, тож показати обидві не вийде.', no: 'Виглядає як прогрес-бар, тож смугу, що зменшується, читають як процес, який от-от завершиться, а не як зв’язок, що згасає.' },
+        en: { n: 'Freshness bar', d: 'The same countdown as a bar under the symbol. Sits where the condition bar goes, so the two cannot both be shown.', no: 'It looks like a progress bar, so a shrinking bar reads as a process about to finish, not as a link fading out.' },
         draw: (s) => base() + `<rect x="40" y="170" width="120" height="14" style="fill:var(--halo);stroke:var(--sym)" stroke-width="2"/><rect x="41" y="171" width="${118 * s.frac}" height="12" style="fill:${s.c}"/>`,
       },
       {
         k: 'app', t: [],
-        uk: { n: 'Історія пінгів', d: 'Останні п’ять очікуваних пінгів квадратиками, найновіший праворуч. Заповнений — отримано, порожній — пропущено. Видно «мерехтливий» зв’язок.' },
-        en: { n: 'Ping history', d: 'The last five expected pings as squares, newest on the right. Filled is received, empty is missed. Shows a flapping link.' },
+        uk: { n: 'Історія пінгів', d: 'Останні п’ять очікуваних пінгів квадратиками, найновіший праворуч. Заповнений — отримано, порожній — пропущено. Видно «мерехтливий» зв’язок.', no: 'Додає когнітивного навантаження: без легенди незрозуміло, що означають квадратики і в який бік іде час.' },
+        en: { n: 'Ping history', d: 'The last five expected pings as squares, newest on the right. Filled is received, empty is missed. Shows a flapping link.', no: 'Adds cognitive load: without a legend it is unclear what the squares mean or which way time runs.' },
         draw: (s) => base() + s.hist.map((h, i) => `<rect x="${42 + i * 24}" y="170" width="20" height="20" style="fill:${h ? 'var(--ok)' : 'var(--halo)'};stroke:var(--sym)" stroke-width="2"/>`).join(''),
       },
     ],
@@ -246,11 +283,22 @@ export const GROUPS = [
         k: 'app', t: [],
         uk: { n: 'Бейдж із кодуванням формою', d: 'Коло — онлайн, трикутник — застарілі дані, квадрат — офлайн. Три форми, що лишаються розрізнюваними в сірих тонах і на малому розмірі.' },
         en: { n: 'Shape-coded badge', d: 'Circle online, triangle stale, square offline. Three shapes that stay distinct in greyscale and at small sizes.' },
-        draw: (s, k) => base() + (k === 'online' ? dot(150, 50, 17, s.c, 'var(--halo)', 4) : k === 'stale' ? `<path d="M150,28 L172,66 L128,66 z" stroke-linejoin="round" style="fill:${s.c};stroke:var(--halo)" stroke-width="4"/>` : `<rect x="133" y="33" width="34" height="34" style="fill:${s.c};stroke:var(--halo)" stroke-width="4"/>`),
+        draw: (s, k) => base() + shapeBadge(s, k),
       },
     ],
   },
 ]
+
+// The shortlist combined into one tile: the shape badge (30) always, the
+// time-since label (5) only once the link is in trouble, and a single halo
+// pulse (15) per received ping rather than a continuous one.
+export const PICK = {
+  k: 'app', t: [],
+  map: 30,
+  uk: { n: 'Разом: 30 + 5 + 15', d: 'Бейдж формою показує стан завжди. Час від пінгу з’являється лише для застарілих і офлайн. Гало спалахує один раз на кожен отриманий пінг.' },
+  en: { n: 'Together: 30 + 5 + 15', d: 'The shape badge always shows the state. Time since the ping appears only when stale or offline. The halo flashes once per received ping.' },
+  draw: (s, k) => (k === 'online' ? ring(60, s.c, 7, '', 'a ping') : '') + base() + shapeBadge(s, k) + (k === 'online' ? '' : txt(180, 82, s.ago)),
+}
 
 // Post copy around the sheet. `published` is ISO so the page can format it
 // per locale. Shortlist items reference tiles by their 1-based number.
@@ -272,8 +320,12 @@ export const POST = {
       offline: { label: 'Офлайн', ping: 'пінг 2 год тому' },
     },
     kinds: { std: 'поле APP-6D', app: 'прийом застосунку' },
+    rejected: 'не рекомендую',
+    crowdCaption: (count) => `${count} ${{ one: 'сенсор', few: 'сенсори' }[new Intl.PluralRules('uk').select(count)] ?? 'сенсорів'}, стани випадкові`,
+    filters: { count: 'Сенсорів на мапі', hideRejected: 'Сховати не рекомендовані' },
     traits: { colourOnly: 'лише колір', twoStates: 'два стани', absenceOnline: 'відсутність = онлайн', motion: 'рух' },
     shortlistTitle: 'Що б я обрав',
+    pickTitle: 'Як це виглядає разом',
     shortlist: [
       {
         lead: 'Бейдж із кодуванням формою (30) як постійний стан.',
@@ -295,8 +347,12 @@ export const POST = {
       offline: { label: 'Offline', ping: 'ping 2 h ago' },
     },
     kinds: { std: 'APP-6D field', app: 'app convention' },
+    rejected: 'not recommended',
+    crowdCaption: (count) => `${count} sensors, random states`,
+    filters: { count: 'Sensors on the map', hideRejected: 'Hide not recommended' },
     traits: { colourOnly: 'colour only', twoStates: 'two states', absenceOnline: 'absence = online', motion: 'motion' },
     shortlistTitle: 'What I would pick',
+    pickTitle: 'How it looks together',
     shortlist: [
       { lead: 'Shape-coded badge (30) as the steady state.', body: 'It reads at a glance, survives colour-blindness and green terrain, and leaves the standard fields free for what they mean.' },
       { lead: 'Time-since label (5) for stale and offline only.', body: 'An online sensor needs no text. A silent one needs the answer to "since when", and field G is a standard slot for it.' },

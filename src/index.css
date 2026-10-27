@@ -182,6 +182,8 @@ body {
 .sensor-sheet .a { transform-box: fill-box; transform-origin: center; }
 .sensor-sheet .pulse { animation: sensor-pulse 1.8s ease-out infinite; }
 .sensor-sheet .pulse.slow { animation-duration: 4.2s; }
+/* One pulse per received ping, then quiet until the next one. */
+.sensor-sheet .ping { animation: sensor-ping 4s ease-out infinite; }
 .sensor-sheet .blink { animation: sensor-blink 1s steps(1) infinite; }
 .sensor-sheet .blink.slow { animation-duration: 3s; }
 .sensor-sheet .spin { animation: sensor-spin 6s linear infinite; }
@@ -191,7 +193,12 @@ body {
 .sensor-sheet .trace { stroke-dasharray: 100; animation: sensor-trace 2s linear infinite; }
 .sensor-sheet .trace.slow { animation-duration: 5s; }
 
+/* Crowd previews give each copy its own phase via `--d`. */
+.sensor-crowd .a,
+.sensor-crowd [class] { animation-delay: var(--d, 0s); }
+
 @keyframes sensor-pulse { from { transform: scale(1); opacity: 0.85; } to { transform: scale(1.75); opacity: 0; } }
+@keyframes sensor-ping { from { transform: scale(1); opacity: 0.85; } 30%, to { transform: scale(1.75); opacity: 0; } }
 @keyframes sensor-blink { 0% { opacity: 1; } 50% { opacity: 0.15; } }
 @keyframes sensor-spin { to { transform: rotate(360deg); } }
 @keyframes sensor-breath { from { opacity: 0.12; } to { opacity: 0.6; } }
@@ -199,6 +206,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .sensor-sheet .pulse,
+  .sensor-sheet .ping,
   .sensor-sheet .blink,
   .sensor-sheet .spin,
   .sensor-sheet .breath,

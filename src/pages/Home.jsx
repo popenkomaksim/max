@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useLanguage } from '../context/LanguageContext.jsx'
 import { translations } from '../i18n/translations.js'
 import profile from '../data/profile.json'
@@ -113,6 +113,19 @@ export default function Home() {
           />
         </p>
       </section>
+
+      {/* A real text-decoration rather than `.basic-link`: this link wraps,
+          and the pseudo-element rule only underlines one line of it. */}
+      <p className="pt-6">
+        {t.home.researchPrefix}{' '}
+        <Link
+          to="/sensor-online-status"
+          className="underline decoration-slate-300 decoration-1 underline-offset-4 transition-colors hover:decoration-slate-500 dark:decoration-slate-600 dark:hover:decoration-slate-300"
+        >
+          {t.home.researchLink}
+        </Link>
+        .
+      </p>
     </div>
   )
 }
